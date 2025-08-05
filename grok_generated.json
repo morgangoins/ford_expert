@@ -1,0 +1,1289 @@
+{
+  "model": "2025 Ford F-150",
+  "cab_styles": {
+    "Regular Cab": {
+      "bed_lengths": [
+        {
+          "length": "6.5 ft",
+          "wheelbase": "122.5 in",
+          "gvwr_range": "6010-7050 lbs",
+          "drivetrains": [
+            
+           
+          
+            "4x2",
+            "4x4"
+          ],
+          "trims": [
+            {
+              "name": "XL",
+              "series_code": "W1C",
+              "standard_features": {
+                "mechanical": [
+                  "2.7L V6 EcoBoost with Auto Start-Stop Technology (standard)",
+                  "Electronic 10-Speed Automatic Transmission",
+                  "Axle: Front - Independent Front Suspension (IFS)",
+                  "Axle: Rear - Hotchkiss-type non-independent live, leaf springs",
+                  "Brakes - Power 4-wheel vented disc with Anti-Lock Brake System (ABS)",
+                  "Electric Parking Brake",
+                  "Fail Safe Cooling (included with 5.0L V8)",
+                  "Hi-Lock Transfer Case (4x4)",
+                  "Jack - 2-ton (4x2), 4-ton (4x4)",
+                  "Shock Absorbers, Gas - Heavy-Duty, Front/Rear",
+                  "Springs, Front - Coil",
+                  "Springs, Rear - Leaf, Two-Stage Variable Rate",
+                  "Stabilizer Bar, Front",
+                  "Steering - Power, Rack-and-Pinion"
+                ],
+                "exterior": [
+                  "Bumper, Front - Chrome",
+                  "Bumper, Rear - Chrome",
+                  "Cargo Lamp integrated w/ Center High Mounted Stop Lamp (CHMSL)",
+                  "Daytime Running Lamps (DRL)",
+                  "Easy Fuel Capless Fuel-Filler",
+                  "Exhaust - Single Rear",
+                  "F-150 Fender Badge",
+                  "Grille - Black Two Bar Style w/ Black Surround and Accents",
+                  "Handles, Door and Tailgate - Black",
+                  "Headlamps - Halogen",
+                  "Headlamps - Autolamp (Auto On/Off)",
+                  "Hooks - Cargo Box Tie-Down, four (4)",
+                  "Hooks - Front Tow, two (2) (4x4)",
+                  "Mirrors, Sideview - Manual-folding, Power Glass with Black Skull Caps",
+                  "Spare Tire/Wheel Lock",
+                  "Stone Cuffs, Front and Rear",
+                  "Tailgate - manual lift/lock",
+                  "Tailgate Tie Down Hooks (4)",
+                  "Tires - 245/70R17 BSW all-season (A/S) (4x2), 265/70R17 BSW all-terrain (A/T) (4x4)",
+                  "Trailer Sway Control",
+                  "Trailer Towing - 4-pin wiring, ball mounting provisions in rear bumper",
+                  "Wheels - 17\" Silver Steel",
+                  "Windshield Wipers - Intermittent",
+                  "XL Series Badge"
+                ],
+                "interior": [
+                  "1st Row - Manual Windows",
+                  "1st Row - Power Point - 12V",
+                  "2-Way manual driver/passenger seats",
+                  "Air Conditioning Registers - Chrome (w/ manual A/C)",
+                  "AM/FM Stereo (2 speakers)",
+                  "Auxiliary Audio Input Jack",
+                  "Black Vinyl Floor Covering",
+                  "Compass Display",
+                  "Cruise Control (steering wheel-mounted)",
+                  "Dome Light",
+                  "Fade-to-Off Interior Lighting",
+                  "Grab Handles, Front - A-Pillar, Driver & Passenger Side",
+                  "Horn - Dual-Note",
+                  "Illuminated Entry",
+                  "Manual Air Conditioning, Single Zone",
+                  "Manual Locks",
+                  "Outside Temperature Display",
+                  "Powerpoint 12V - Front",
+                  "Rear Window with Fixed Glass and Solar Tint",
+                  "Rearview Mirror, Day/Night",
+                  "Scuff Plate, Driver & Front-Passenger Doors",
+                  "Scuff Plates - MIC, Front",
+                  "Seat, Front - Cloth 40/20/40",
+                  "Steering Wheel, Black Urethane - Manual Tilt/Telescoping and Manual Locking",
+                  "Tachometer",
+                  "Trip Computer",
+                  "Visors, Driver & Front Passenger w/ Passenger Mirror",
+                  "Voltmeter",
+                  "Water Temperature Gauge"
+                ],
+                "safety_security": [
+                  "AdvanceTrac with Roll Stability Control (RSC)",
+                  "Airbags - Front, Driver & Passenger Seat Mounted Side, Safety Canopy Side Curtain w/Rollover Sensor",
+                  "Curve Control",
+                  "MyKey",
+                  "Perimeter Alarm",
+                  "Safety Belts - Active Restraint System (ARS), Three-Point Manual Lap/Shoulder Belts w/ Height Adjusters, Pretensioners & Energy Mgmt Retractors on Front Outboard Seating Positions",
+                  "Seat Belt-Minder",
+                  "SecuriLock Passive Anti-Theft System",
+                  "SOS Post-Crash Alert System",
+                  "Tire Pressure Monitoring System (TPMS)"
+                ],
+                "ford_co_pilot360_technology": [
+                  "Auto High Beams",
+                  "Blind Spot Assist",
+                  "BLIS with Cross-Traffic Alert",
+                  "Camera Only AEB (Choming)",
+                  "Camera Only Evasive Steering Assist",
+                  "Lane-Keeping System",
+                  "Lane-Keeping Alert",
+                  "Lane Keeping Aid",
+                  "Driver Alert",
+                  "Road Edge Detection",
+                  "Lane Keep Assist",
+                  "Pre-Collision Assist with Automatic Emergency Braking (AEB)",
+                  "Pedestrian Detection",
+                  "Forward Collision Warning",
+                  "Dynamic Brake Support",
+                  "Post-Collision Braking",
+                  "Rear View Camera",
+                  "Reverse Brake Assist"
+                ],
+                "functional": [
+                  "12\" Productivity Screen in Instrument Cluster",
+                  "FordPass Connect 5G Wi-Fi Modem (3-month max data trial, 5GB or 3-months, extendable)",
+                  "SYNC 4 w/ 12\" Screen, AppLink, Apple CarPlay, Android Auto",
+                  "Wireless Phone Connection"
+                ]
+              },
+              "engines": [
+                {
+                  "name": "2.7L V6 EcoBoost with Auto Start-Stop",
+                  "horsepower": "3
+                    25",
+                   
+                  
+                  "torque": "400 lb-ft",
+                  "transmission": "10-Speed Automatic",
+                  "axle_ratios": [
+                    "3.55 (standard)",
+                    "3.73 Electronic-Locking (optional)"
+                  ]
+                },
+                    
+                   
+                   
+                  
+                {
+                  "name": "5.0L V8 with Auto Start-Stop",
+                  "horsepower": "400",
+                  "torque": "410 lb-ft",
+                  "transmission": "10-Speed Automatic",
+                  "axle_ratios": [
+                    "3.31 (standar
+                    d)",
+                   
+                   
+                  
+                    "3.55 (optional)",
+                    "3.73 Electronic-Locking (optional)"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost with Auto Start-Stop",
+                  "horsepower": "4
+                    00",
+                  
+                  "torque": "500 lb-ft",
+                  "transmission": "10-Speed Automatic",
+                  "axle_ratios": [
+                    "3.31 (standard)",
+                    "3.55 (optional)",
+                    "3.73 Electronic-Locking (optional)"
+                  ]
+                },
+                {
+                  "name": "3.5L PowerBoost Full Hybrid V6 (Fleet only, requires 4x4)",
+                  "horsepower": "430",
+                  "torque": "570 lb-ft",
+                  "transmission": "Hybrid Electronic 10-Speed Automatic",
+                  "axle_ratios": [
+                    "3.73 Electronic-Locking"
+                  ],
+                  "includes": "Pro Power Onboard 2.4kW"
+                }
+              ],
+              "optional_features": {
+                "packages": [
+                  "Class IV Trailer Hitch (53B, includes Smart Trailer Tow Connector, 7/4-pin connector, Class IV hitch, trailer sway control)",
+                  "STX Package (NA on Regular Cab)",
+                  "FX4 Off-Road Package (55A, requires 4x4, includes electronic-locking rear axle, off-road tuned shocks, hill descent control, skid plates, rock crawl mode, 4x4 FX4 decal)",
+                  "XL Chrome Appearance Package (54R, includes chrome bumpers, 17\" silver painted aluminum wheels)",
+                  "XL High Equipment Group (101A, includes cruise control, SYNC 4, etc.)",
+                  "Tow/Haul Package (53A, includes integrated trailer brake controller, upgrade rear bumper, Pro Trailer Backup Assist)"
+                ],
+                "exterior_options": [
+                  "17\" Silver Painted Aluminum Wheels (64C)",
+                  "18\" Chrome-Like PVD Wheels (64D, requires Chrome Pkg)",
+                  "BoxLink (55B)",
+                  "LED Box Lighting (85P)",
+                  "Tailgate Step with Tailgate Work Surface (63T)",
+                  "Power Tailgate (NA with 8' box)",
+                  "Rear Privacy Glass (924)",
+                  "Two-Tone Paint (953)"
+                ],
+                "interior_options": [
+                  "Cloth 40/20/40 Front Seat (A)",
+                  "Cloth 40/Console/40 Front Seat (Fleet, C)",
+                  "Vinyl 40/20/40 Front Seat (V)",
+                  "Cruise Control (50S)",
+                  "Floor Liners (47R)",
+                  "Pro Power Onboard 2.0kW (471, NA with PowerBoost)"
+                ],
+                "functional_options": [
+                  "Electronic-Locking Rear Differential (X19/X26/X73)",
+                  "Integrated Trailer Brake Controller (67T)",
+                  "Onboard Scales w/Smart Hitch (55S)",
+                  "Pro Trailer Backup Assist (55G)",
+                  "Snow Plow Prep (68P, 4x4 only)",
+                  "36 Gallon Fuel Tank (655, requires 141\" WB)"
+                ],
+                "fleet_options": [
+                  "Daytime Running Lamps (942)",
+                  "Fleet Telematics Modem (16T)",
+                  "Special Order Paints"
+                ]
+              },
+              "exterior_colors": [
+                "Oxford White (YZ)",
+                "Agate Black Metallic (UM)",
+                "Iconic Silver Metallic (JS)",
+                "Carbonized Gray Metallic (M7)",
+                "Atlas Blue Metallic (B3)",
+                "Antimatter Blue Metallic (HX)",
+                "Rapid Red Metallic Tinted Clearcoat (D4, extra cost)",
+                "Fleet: Avalanche Gray (DR), School Bus Yellow (B1), Green (GR), Orange (MB), Vermillion Red (E4), Yellow (AT)"
+              ],
+              "interior_colors": [
+                "Medium Dark Slate Vinyl",
+                "Medium Dark Slate Cloth"
+              ],
+              "dependencies": {
+                "FX4 Off-Road Package": "Requires 4x4",
+                "3.5L Powe
+            rBoost
+            Hybri
+          d": "Fleet only, requires 4x4, NA with fleet colors except Oxford White",
+                "Pro Power Onboard 7.2kW": "Requires PowerBoost",
+                "Snow Plow Prep": "Requires 4x4, 5.0L or 3.5L, NA with PowerBoost"
+              },
+              "restrictions": [
+                "NA with 157\" WB",
+                "Some options NA with 8' box",
+                "Fleet colors require valid FIN code, NA with PowerBoost except Oxford White"
+              ]
+            }
+          ]
+        },
+                    
+                   
+                  
+        {
+          "length": "8 ft",
+          "wheelbase": "141 in",
+          "gvwr_range": "6250-7250
+                     lbs",
+                   
+                   
+                  
+          "drivetrains": [
+            "4x2",
+            "4x4"
+          ],
+                    
+                   
+                   
+                  
+          "trims": [
+            {
+              "name": "XL",
+              "series_code": "W1C",
+              "standard_features": {
+                "same_as_6.5ft": "Yes, with adjustments for bed length"
+              },
+              "engines": [
+                {
+                
+               
+              
+                  "name": "2.7L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.55",
+                    "3.73 E-Lock"
+                  ]
+                },
+                {
+                  "name": "5.0L V8",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55",
+                    "3.73 
+            E-Lock
+           "
+          
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55",
+                    "3.73 E-Lock"
+                  ]
+                }
+              ],
+              "optional_features": {
+                "similar_to_6.5ft": "Yes, but NA PowerBoost on 8ft box"
+              },
+              "exterior_colors": "Same as 6.5ft",
+              "interior_colors": "Same as 6.5ft",
+              "dependencies": "Similar, no PowerBoost",
+              "restrictions": [
+                "NA PowerBoost",
+                "NA Power Tailgate"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "SuperCab": {
+      "bed_lengths": [
+        {
+          "length": "6.5 ft",
+          "wheelbase": "145 in",
+          "gvwr_range": "6350-7350 lbs",
+          "drivetrains": [
+            "4x2",
+            "4x4"
+          ],
+          "trims": [
+            {
+              "name": "XL",
+              "series_code": "X1C",
+              "standard_features": {
+                "interior_additional": [
+                  "Grab Handles, Rear - B-Pillar",
+                  "Rear Doors, Full",
+                  "Seat, Rear - Vinyl 60/40 flip-up split seat"
+                ],
+                "other": "Similar to Regular Cab XL"
+              },
+              "engines": "Same as Regular Cab XL",
+              "optional_features": {
+                "seats_rear": "Cloth 60/40 flip-up split seat",
+                "other": "Similar, plus SuperCab specific like rear power windows"
+              },
+                    
+                   
+                  
+              "exterior_colors": "Same",
+              "interior_colors": "Same",
+              "dependencies": "Similar",
+              "restrictions": "PowerBoost available Fleet only 4x4"
+            },
+            {
+                    
+                   
+                   
+                  
+              "name": "STX",
+              "series_code": "X2C",
+              "standard_features": {
+                "includes_all_XL_plus": [
+                  "18\" Dark Painted Aluminum Wheels",
+                  "265/60R18 BSW A/S Tires (4x2), 275/65R18 BSW A/T (4x4)",
+                  "Body-Color Front & Rear Bumpers",
+                  "Body-Color Skull Caps on Mirrors",
+                  "Box Side Decal",
+                  "Cloth 40/Console/40 Front Seat",
+                  "Color-Coordinated Carpet w/ Carpet Floor Mats",
+                  "Fog Lamps - LED",
+                  "Grille - Black",
+                  "Unique Sport Cloth Seats",
+                  "STX Badge on Fender",
+                  "SYNC 4 with Enhanced Voice Recognition",
+                  "12\" Display Screen"
+                ]
+              },
+              "equipment_groups": {
+                "200A": {
+                  "description": "Standard"
+                }
+              },
+              "engines": [
+                {
+                  "name": "2.7L V6 EcoBoost",
+                  "horsepower": "325",
+                  "torque": "400 lb-ft",
+                  "axle_ratios": [
+                    "3.55",
+                    "3.73 E-Lock (with FX4)"
+                  ]
+                },
+                {
+                  "name": "5.0L V8",
+                  "horsepower": "400",
+                  "torque": "410 lb-ft",
+                  "axle_ratios"
+                : [
+               
+              
+                    "3.31",
+                    "3.55",
+                    "3.73 E-Lock"
+                  ]
+                }
+              ],
+              "optional_features": {
+                "packages": [
+                  "STX Black Appearance Package (191, includes 20\" Gloss Black Wheels, Black Exterior Badging, Black Grille, Dark Interior Appliques, Unique Black Sport Cloth Seats)",
+                  "FX4 Off-Road Package (55A, requires 4x4, includes 3.73 E-Lock Rear Axle, Off-Road Tuned Shocks, Hill Descent Control, Skid Plates, Rock Crawl Mode, FX4 Decal)"
+                ],
+                "exterior_options": [
+                  "20\" Dark Gray Wheels (64G, NA with Black Pkg)",
+                  "LED Sideview Mirror Spotlights (59A)",
+                  "Manual-Folding Power Glass Sideview Mirrors (54R)"
+                ],
+                "interior_options": [
+                  "Console Vault (60V)",
+                  "Floor Liners (47R)"
+                ],
+                "functional_options": [
+                  "Pro Power Onboard 2.0kW (471)",
+                  "Integrated Trailer Brake Controller (67T)"
+                ]
+              },
+              "exterior_colors": [
+                "Oxford White (YZ)",
+                "Agate Black Metallic (UM)",
+                "Iconic Silver Metallic (JS)",
+                "Carbonized Gray Metallic (M7)",
+                "Atlas Blue Metallic (B3, NA with Black Pkg)",
+                "Antimatter Blue Metallic (HX)",
+                "Rapid Red Metallic Tinted Clearcoat (D4, extra cost)",
+                "Avalanche (DR, extra cost, NA with Black Pkg)"
+              ],
+              "interior_colors": [
+                "Black Sport Cloth"
+              ],
+              "dependencies": {
+                "Black Appearance Package": "Requires specific colors",
+                "FX4": "Requires 4x4, changes axle to 3.73 E-Lock for 2.7L"
+              },
+              "restrictions": [
+                "NA 3.5L engine",
+                "NA with 5.5' or 8' box"
+              ]
+            },
+            {
+              "name": "XLT",
+              "series_code": "W1L",
+              "standard_features": {
+                "includes_all_STX_plus": [
+                  "Chrome Front & Rear Bumpers",
+                  "Chrome Grille with Chrome Accents",
+                  "Power Windows & Locks",
+                  "Power Tailgate Lock",
+                  "Power-Adjustable Pedals (NA with manual seats)",
+                  "XLT Badge",
+                  "Cloth 40/Console/40 Front Seat",
+                  "Dual-Zone Electronic Automatic Temperature Control (DEATC, High)",
+                  "Intelligent Access with Push-Button Start (High)",
+                  "Remote Start System (High)"
+                ]
+              },
+                
+              
+              "equipment_groups": {
+                "300A": "Base",
+                "301A": "Standard",
+                "302A": "Mid",
+                "303A": "High"
+              },
+              "engines": "Same as XL, including 3.5L EcoBoost and PowerBoost (non-Fleet)",
+              "optional_fe
+            atures
+           ": {
+          
+                "packages": [
+                  "XLT Black Appearance Package (193, requires 302A+, includes 20\" Gloss Black Wheels, Black Grille, Black Badging, Dark Interior Appliques, Unique Sport Cloth Seats)",
+                  "XLT Black Appearance Plus Package (19P, 303A only, includes Black Leather-Wrapped Steering Wheel, Dual-Zone DEATC)",
+                  "FX4 Off-Road (55A)",
+                  "Tow/Haul (53A)",
+                  "Bed Utility (68B)",
+                  "Mobile Office (55M)"
+                ],
+                "exterior_options": [
+                  "20\" Chrome-Like PVD Wheels (64F)",
+                  "Twin Panel Moonroof (43V, High only)",
+                  "Power-Sliding Rear Window (435)",
+                  "LED Box Lighting with Zone Lighting (85Z)"
+                ],
+                "interior_options": [
+                  "Heated Front Seats (303A)",
+                  "Power Driver Seat (10-way, 303A)",
+                  "B&O Sou
+            nd Sys
+           tem (5
+          8B, High)",
+                  "Wireless Charging Pad (19W, High)"
+                ],
+                "functional_options": [
+                  "Adaptive Cruise Control with Stop & Go (44A, High)",
+                  "BlueCruise (99C, High)",
+                  "Pro Trailer Hitch Assist (55H)",
+                  "Onboard Scales (55S)"
+                ]
+              },
+              "exterior_colors": "Same as STX plus Space White (A3), Marsh Gray (T9, NA 300A)",
+              "interior_colors": [
+                "Medium Dark Slate Cloth",
+                "Smoked Truffle Cloth",
+                "Black Sport Cloth (Black Pkg)"
+              ],
+              "dependencies": {
+                "PowerBoost": "Requires 4x4, includes Pro Power 2.4kW, optional 7.2kW",
+                "Black Pkg": "Requires 302A or higher"
+              },
+              "restrictions": [
+                "Fleet colors NA with Black Pkg or PowerBoost"
+              ]
+            }
+          ]
+        },
+        {
+          "length": "8 ft",
+          "wheelbase": "163.7 in",
+                    
+                   
+                  
+          "gvwr_range": "6500-7400 lbs",
+          "drivetrains": [
+            "4x2",
+            "4x4"
+                    
+                   
+                   
+                  
+          ],
+          "trims": [
+            {
+              "name": "XL",
+              "standard_features": "Similar to 6.5ft SuperCab",
+              "engines": "Same, no PowerBoost",
+              "restrictions": "
+                NA PowerB
+              oost, NA some long bed options"
+            }
+          ]
+        }
+      ]
+    },
+    "SuperCrew": {
+      "bed_lengths": [
+        {
+          "length": "5.5 ft",
+          "wheelbase": "145 in",
+          "gvwr_range": "6400-7400 lbs",
+          "drivetrains": [
+            "4x2",
+            "4x4"
+          ],
+          "trims": [
+            {
+              "name": "XL",
+              "series_code": "W1E",
+              "standard_features": {
+                "interior_additional": [
+                  "Power Windows, Front and Rear",
+                  "Power Door Locks",
+                  "Flip-Up Rear Seat with Under Seat Storage",
+                  "Rear Seat Cupholders and Flow-Through Console (optional)"
+                ],
+                "other": "Similar to SuperCab XL"
+              },
+              "engines": "Same as SuperCab XL",
+              "optional_features": "Similar",
+              "exterior_colors": "Same",
+              "interior_colors": "Same",
+              "dependencies": "Similar",
+              "restrictions": "Similar"
+            },
+            {
+              "name": "STX",
+              "series_code": "X2E",
+              "standard_features": "Similar to SuperCab STX, with SuperCrew adjustments like rear seat",
+              "engines": [
+                {
+                  "name": "2.7L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.55",
+                    "3.73 E-Lock"
+                  ]
+                },
+                {
+                  "name": "5.0L V8",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55",
+                    "3.73 E-Lock"
+                  ]
+                }
+              ],
+              "optional_features": "Similar to SuperCab STX",
+              "exterior_colors": "Same",
+              "interior_colors": "
+                    Same",
+                   
+                  
+              "dependencies": "Similar",
+              "restrictions": [
+                "NA 3.5L"
+              ]
+                    
+                   
+                   
+                  
+            },
+            {
+              "name": "XLT",
+              "series_code": "W1E"
+                    ,
+                   
+                  
+              "standard_features": "Similar to SuperCab XLT",
+              "engines": "Same as SuperCab XLT",
+              "optional_features": "Similar",
+              "exterior_colors": "
+                    Same",
+                  
+              "interior_colors": "Same",
+              "dependencies": "Similar",
+              "restrictions": "Similar"
+            },
+            {
+              "name": "Lariat",
+              "series_code": "W5E",
+              "standard_features": {
+                "includes_all_XLT_high_plus": [
+                  "5.0L V8 standard",
+                  "Two-Speed Automatic 4WD (4x4)",
+                  "Front Tow Hooks (2)",
+                  "Mirrors - Power-Folding, Power Glass with Heat, Turn Signal, Memory, Auto-Dimming (Driver), High-Intensity LED Security Approach Lamps, LED Sideview Spotlights, Chrome Skull Caps",
+                  "LED Projector Headlamps with Dynamic Bending",
+                  "Tailgate LED",
+                  "Additional Steering Wheel Controls",
+                  "Auto-Dimming Rearview Mirror",
+                  "Dual-Zone DEATC",
+                  "Leather-Wrapped Heated Steering Wheel",
+                  "Media Bin",
+                  "Power-Adjustable Pedals with Memory",
+                  "Power Driver/Passenger Seat with Memory Driver's Seat",
+                  "Leather-Trimmed 40/Console/40 Front Seat",
+                  "Heated and Ventilated Front Seats",
+                  "2nd Row Heated Seats",
+                  "Intelligent Access with Push-Button Start",
+                  "Remote Start System",
+                  "Universal Garage Door Opener",
+                  "Ambient Lighting",
+                  "Memory Driver Seat & Mirrors",
+                  "SiriusXM with 360L",
+                  "SYNC 4 with Enhanced Voice Recognition",
+                  "12\" Digital Productivity Screen",
+                  "B&O Sound System with 8 Speakers",
+                  "Wireless Charging Pad",
+                  "Ford Co-Pilot360 Assist 2.0 (Adaptive Cruise, Evasive Steering, Intersection Assist, Connected Navigation 1 year)",
+                  "Power Tailgate",
+                  "Power-Sliding Rear Window",
+                  "18\" Chrome-Like PVD Wheels",
+                  "275/65R18 BSW A/T Tires"
+                ]
+              },
+              "equipment_groups": {
+                "500A": "Standard",
+                "501A": "Mid",
+                "502A": "High"
+              },
+              "engines": [
+                {
+                  "name": "2.7L
+                 V6 EcoBoost (op
+              tional)",
+                  "axle_ratios": [
+                    "3.55",
+                    "3.73"
+                  ]
+                },
+                {
+                  "name": "5.0L V8 (standard)",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55",
+                    "3.73"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost (optional)",
+                  "axle_ratios": [
+                    "3.55",
+                    "3.73"
+                  ]
+                },
+                {
+                  "name": "3.5L PowerBoost Hybrid (optional)",
+                  "axle_ratios": [
+                    "3.73"
+                  ],
+                  "includes": "Pro Power 2.4kW, optional 7.2kW"
+                }
+              ],
+              "optional_features": {
+                "packages": [
+                  "Lariat Black Appearance Package (194, includes 20\" Gloss Black Wheels, Black Grille, Black Badging, Unique Black Leather Seats)",
+                  "FX4 Off-Road (55A)",
+                  "Tow/Haul (53A)",
+                  "Bed Utility (68B, includes LED Box Lighting, Power Tailgate, Tailgate Step, BoxLink)",
+                  "Mobile Office (55M, includes Wireless Charging, Console Vault, 40/Blank/40 Seat)"
+                ],
+                "exterior_options": [
+                  "20\" Chrome-Like PVD Wheels (64F)",
+                  "22\" 6-Spoke Dark Alloy Wheels (64H, NA FX4 or 157 WB)",
+                  "Chrome Exhaust Tip (86C)",
+                  "Twin Panel Moonroof (43V)",
+                  "Retractable Tonneau Pickup Box Cover (96J)"
+                ],
+                    
+                   
+                  
+                "interior_options": [
+                  "B&O Unleashed Sound System with 14 Speakers (583, High)",
+                  "Head-Up Display (90H, High)",
+                  "Leather-Trimmed
+                     Bucket
+                    Seats 
+                  with Console (High)"
+                ],
+                "functional_options": [
+                  "BlueCruise Hands-Free Driving (99C, High)",
+                  "Pro Power Onboa
+                    rd 7.2
+                  kW (477, requires PowerBoost)",
+                  "Continuous Controlled Damping (55D, High, requires 22\" wheels)",
+                  "360-Degree Camera Package (763)"
+                ]
+              },
+              "exterior_colors": [
+                "Oxford White (YZ)",
+                "Agate Black Metallic (UM)",
+                "Iconic Silver Metallic (JS)",
+                "Carbonized Gray Metallic (M7)",
+                "Atlas Blue Metallic (B3)",
+                "Antimatter Blue Metallic (HX)",
+                "Rapid Red Metallic Tinted Clearcoat (D4)",
+                "Avalanche (DR)",
+                "Space White Metallic (A3)"
+              ],
+              "interior_colors": [
+                "Black Leather-Trimmed",
+                "Smoked Truffle Leather-Trimmed"
+              ],
+              "dependencies": {
+                "22\" Wheels": "NA with FX4, 157 WB, requires PowerBoost for some",
+                "Continuous Controlled Damping": "Requires High, 22\" wheels"
+              },
+              "restrictions": [
+                "Only SuperCrew"
+              ]
+            },
+            {
+              "name": "King Ranch",
+              "series_code": "W3K",
+              "standard_features": {
+                "includes_all_Lariat_high_plus": [
+                  "3.5L V6 EcoBoost standard",
+                  "Accent-Color Angular Step Bars",
+                  "Badge - King
+                 Ranch Fender",
+               
+              
+                  "Bumper, Front/Rear - Accent-Color",
+                  "Chrome Door Handles with Body-Color Strap",
+                  "Chrome Skull Caps on Mirrors",
+                  "Chrome Single-Tip Exhaust",
+                  "Chrome Two-Bar Style Grille with Chrome Surround and Accents",
+                  "King Ranch Badge on Tailgate",
+                  "King Ranch Center Cap on Wheels",
+                  "LED Fog Lamps with LED Cornering Lamp",
+                  "LED Projector with Dynamic Bending Headlamps w/ LED Taillamps",
+                  "Power-Deployable Running Boards",
+                  "Quad Beam LED Headlamps",
+                  "Rain-Sensing Wipers",
+                  "Two-Tone Paint",
+                  "20\" Chrome-Like PVD Wheels with King Ranch Ornament",
+                  "275/60R20 BSW A/T Tires",
+                  "Accent Color Interior",
+                  "Flow-Through Console with Floor Shifter",
+                  "Heated Steering Wheel - Power Tilt/Telescoping with Memory",
+                  "Heated Rear Seats",
+                  "Kingsville Leather Bucket Seats",
+                  "Multi-Contour Driver & Passenger Seats with Active Motion Massage",
+                  "Power-Deployable Running Boards",
+                  "B&O Unleashed Sound System with 14 Speakers",
+                  "Head-Up Display",
+                  "BlueCruise Hands-Free Driving (1-year plan)"
+                ]
+              },
+              "equipment_groups": {
+                "601A": "High"
+              },
+              "engines": [
+                {
+                  "name": "3.5L V6 EcoBoost (standard)",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55"
+                  ]
+                },
+                {
+                  "name": "5.0L V8 (optional)",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55"
+                  ]
+                },
+                {
+                  "name": "3.5L PowerBoost Hybrid (optional)",
+                  "axle_ratios": [
+                    "3.73"
+                  ]
+                }
+              ],
+              "optional_features": {
+                "packages": [
+                  "FX4 Off-Road (55A)",
+                  "Tow/Haul (53A)",
+                  "Bed Utility (68B)",
+                  "King Ranch Chrome Appearance Package (86K, includes 20\" Chrome Wheels, Chrome Mirror Caps)"
+                ],
+                "exterior_options": [
+                  "22\" Premium Painted Wheels with Chrome Inserts (649, requires PowerBoost, NA FX4 or 157 WB)",
+                  "Twin Panel Moonroof (43V)",
+                  "Multi-Contour Seat Delete (91X, credit)"
+                ],
+                "functional_options": [
+                  "Pro Power Onboard 7.2kW (477, PowerBoost)",
+                  "Continuous Controlled Damping (55D, requires 22\" wheels)"
+                ]
+              },
+              "exterior_colors": [
+                "Oxford White (YZ)",
+                "Agate Black Metallic (UM)",
+                "Iconic Silver Metallic (JS)",
+                "Carbonized Gray Metallic (M7)",
+                "Antimatter Blue Metallic (HX)",
+                "Rapid Red Metallic Tinted Clearcoat (D4)",
+                "Star White Metallic Tri-Coat (AZ, extra cost)"
+              ],
+              "interior_colors": [
+                    
+                  
+                "Kingsville/Java Leather"
+              ],
+              "dependencies": {
+                "22\" Wheels": "Re
+                    quires PowerB
+                  oost, NA FX4, 157 WB"
+              },
+              "restrictions": [
+                "Only SuperCrew",
+                "NA with 122 WB"
+                    
+                  
+              ]
+            },
+            {
+              "name": "Platinum",
+              "series_code": "W7E",
+              "standard_features": {
+                "includes_all_King_Ranch_plus": [
+                  "Badge - Platinum Fender",
+                  "Bumper, Front/Rear - Body-Color",
+                  "Gloss Black Belt Moldings",
+                  "Platinum Badge on Tailgate",
+                  "Power-Deployable Running Boards with Black Accent",
+                  "20\" Painted Gloss Ebony Black Wheels",
+                  "Unique Multi-Contour Leather Bucket Seats with Active Motion",
+                  "Unique Platinum Interior"
+                ]
+              },
+              "equipment_groups": {
+                "701A": "Standard",
+                "702A": "High"
+              },
+              "engines": "Same as King Ranch",
+              "optional_features": {
+                "packages": "Similar to King Ranch, plus Platinum Black Appearance (195, includes 20\" Gloss Black Wheels, Black Exterior Elements)",
+                "exterior_options": [
+                  "22\" Gloss Black Wheels (64J, requires PowerBoost, NA FX4, 157 WB, Max Tow Axle)"
+                ],
+                "other": "Similar"
+              },
+              "exterior_colors": "Same as King Ranch plus Avalanche (DR)",
+              "interior_colors"
+                : [
+               
+              
+                "Black Leather"
+              ],
+              "dependencies": "Similar",
+              "restrictions": "Similar"
+            },
+            {
+              "name": "Tremor",
+              "series_code": "W5T",
+              "standard_features": {
+                "includes_all_Lariat_mid_plus": [
+                  "5.0L V8 standard",
+                  "3.73 Electronic-Locking Rear Axle",
+                  "9.75\" Gearset",
+                  "Transfer Case - Electronic Shift-On-the-Fly (ESOF) with Neutral Towing Capability",
+                  "Off-Road Tuned Front & Rear Shocks",
+                  "SelectShift Automatic Transmission with Progressive Range Select",
+                  "Skid Plates (Fuel Tank, Transfer Case, Front Differential)",
+                  "Unique Dual Exhaust with Dual Tailpipes Under Bumper",
+                  "18\" Alloy Wheels with Dark Matte Finish",
+                  "275/70R18 A/T Tires",
+                  "Bumper, Front - Body-Color with Black Lower Valance",
+                  "Bumper, Rear - Body-Color with Black Lower Valance",
+                  "Grille - Unique Tremor Style with Active Orange Accents",
+                  "Hood Vent with Air Curtain",
+                  "Mirrors - Power-Folding, Power Glass with Heat, Turn Signal, Memory, Auto-Dimming, LED Spotlights, Black Skull Caps",
+                  "Running Boards, Angular - Cast Aluminum",
+                  "Tremor Badge on Fender and Tailgate",
+                  "Unique Front Tow Hooks (2, Red)",
+                  "Unique Tremor Box Decal",
+                  "Trail Control with Trail 1-Pedal Drive",
+                  "Trail Turn Assist",
+                  "Flow-Through Console with Floor Shifter",
+                  "Unique Leather-Trimmed Seats with Tremor Logo",
+                  "Unique Steering Wheel - Leather-Wrapped with Thumb Pads",
+                  "Unique Zone Lighting",
+                  "360-Degree Camera",
+                  "Advanced Security Pack",
+                  "Ford Co-Pilot360 Active 2.0 (BlueCruise Prep Kit)",
+                  "Pro Trailer Backup Assist & Pro Trailer Hitch Assist"
+                ]
+              },
+              "equipment_groups": {
+                "401A": "Standard",
+                "402A": "High (includes Modular Hard Drop-In Bedliner, Torsen Front Differential, B&O Unleashed Sound, Head-Up Display, BlueCruise)"
+              },
+              "engines": [
+                {
+                  "name": "5.0L V8 (standard)",
+                  "axle_ratios": [
+                    "3.73 E-Lock"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost (optional)",
+                  "axle_ratios": [
+                    "3.73 E-Lock"
+                  ]
+                },
+                {
+                  "name": "3.5L Po
+                    werBoo
+                  st Hybrid (optional)",
+                  "axle_ratios": [
+                    "3.73"
+                  ]
+                }
+                    
+                  
+              ],
+              "optional_features": {
+                "packages": [
+                  "Bed Utility (68B)",
+                  "Mobile Office (55M)",
+                  "Tow/Haul (53A)"
+                ],
+                "functional_options": [
+                  "Pro Power Onboard 2.4kW (PowerBoost standard, 471 for others)",
+                  "Pro Power Onboard 7.2kW (477, PowerBoost)",
+                  "Continuous Controlled Damping (55D, High)"
+                ]
+              },
+              "exterior_colors": [
+                "Oxford White (YZ)",
+                "Agate Black Metallic (UM)",
+                "Iconic Silver Metallic (JS)",
+                "Carbonized Gray Metallic (M7)",
+                "Atlas Blue Metallic (B3)",
+                "Antimatter Blue Metallic (HX)",
+                "Rapid Red Metallic Tinted Clearcoat (D4)",
+                "Avalanche (DR)"
+              ],
+              "interior_colors": [
+                "Black Leather-Trimmed with Tremor Logo"
+              ],
+              "dependencies": {
+                "High Group": "Includes additional features like Hard Bedliner"
+              },
+              "restrictions": [
+                "4x4 only",
+                "5.5 ft box only"
+              ]
+            },
+            {
+                
+               
+              
+              "name": "Raptor",
+              "series_code": "W1R",
+              "standard_features": {
+                "mechanical": [
+                  "3.5L V6 EcoBoost High Output (450 hp, 510 lb-ft)",
+                  "10-Speed Automatic Transmission with Terrain Management System",
+                  "4.10 Front Axle with TORSEN Differential",
+                  "Electro
+            nic-L
+          ocking Rear Differential",
+                  "Fox Live Valve Shocks",
+                  "Long Travel Suspension with Unique Front Upper & Lower Control Arms",
+                  "Unique Rear Suspension with 5-Link Coil",
+                  "Advanced 4x4 with Terrain Modes (Normal, Slippery, Tow/Haul, Deep Snow/Sand, Baja, Rock Crawl, Mud/Ruts)",
+                  "Hi-Lock Transfer Case",
+                  "Trail Control with Trail 1-Pedal Drive",
+                  "Trail Turn Assi
+                    st",
+                   
+                  
+                  "Cast-Aluminum Swing Gate Spare Tire Carrier",
+                  "Fuel Tank - 36 Gallon",
+                  "Unique Hood Vent with Air Curtain",
+                  "Unique Front & 
+                    Rear B
+                  umpers with Functional Vents",
+                  "Unique Grille with Ford Block Letters",
+                  "Unique Running Boards - Cast Aluminum",
+                  "Unique Skid Plates - Front",
+                  "Unique Tailgate Applique",
+                  "17\" Cast Al
+                uminum Whee
+               ls",
+              
+                  "LT315/70R17 BSW A/T Tires",
+                  "Dual Exhaust with Dual Tailpipes",
+                  "Raptor Badge",
+                  "Black Exterior Accents",
+                  "Cast-Aluminum Running Boards",
+                  "Power Dome Hood",
+                  "Rigid LED Fog L
+                    amps",
+                  
+                  "Zone Lighting"
+                ],
+                "interior": [
+                  "Unique Leather-
+                    Trimme
+                  d Seats with Raptor Logo",
+                  "Flow-Through Console with Floor Shifter",
+                  "Unique Steering Wheel - Leather-Wrapped with Thumb Pads & Paddle Shifters",
+                  "Carbon Fiber
+                 Interior Appliques",
+              
+                  "Head-Up Display",
+                  "B&O Unleashed Sound System with 14 Speakers",
+                  "SYNC 4 with 12\" Screen",
+                  "12\" Digital Cluster",
+                  "360-Degree Camera",
+                  "BlueCruise",
+                  "Connected Built
+                    -In Na
+                  vigation",
+                  "Pro Trailer Backup Assist"
+                ],
+                "safety": "Ford Co-Pilot360 Active 2.0, Terrain Management"
+              },
+                    
+                  
+              "equipment_groups": {
+                "801A": "Standard",
+                "802A": "Raptor
+                 37 (includes 37x12.5R17 BSW A/
+              T Tires, 17\" Bead-Lock Capable Wheels, RIGID Fog Lamps, Modular Front Bumper, Dual-Valve Shocks)",
+                "803A": "Raptor R (5.2L Supercharged V8 720 hp 640 lb-ft, Unique 17\" Forged Wheels, Unique Graphics, Code Orange Accents, Recaro Black Leather Seats with Alcantara, Carbon Fiber Appliques)"
+              },
+              "engines": [
+                {
+                  "name": "3.5L V6 EcoBoost High Output (standard)",
+                  "axle_ratios": [
+                    "4.10"
+                    
+                  
+                  ]
+                },
+                {
+                  "name": "5.2L Su
+                    percha
+                  rged V8 (803A only)",
+                  "axle_ratios": [
+                    "4.10"
+                  ]
+                
+              
+                }
+              ],
+              "optional_features": {
+                "packages": [
+                  "Bed Utility (68B)",
+                  "Raptor Exterior Graphics (55G)",
+                  "Interior Code Orange Stitching (803A)"
+                ],
+            
+           
+          
+                "exterior_options": [
+                  "Bead-Lock Wheel Kit (64B)",
+                  "Tailgate Applique Delete (55D)",
+                  "Graphics Delete (55E)"
+                ],
+                "functional_options": [
+                  "Pro Power Onboard 2.0kW (471)"
+                ]
+              },
+              "exterior_colors": [
+                "Oxford White (YZ)",
+                "Agate Black Metallic (UM)",
+                "Iconic Silver Metallic (JS)",
+                "Carbonized Gray Metallic (M7)",
+                "Atlas Blue Metallic (B3)",
+                "Antimatter Blue Metallic (HX)",
+                "Rapid Red Metallic Tinted Clearcoat (D4)",
+                "Avalanche (DR)",
+                "Shelter Green (803A only)"
+              ],
+              "interior_colors": [
+                "Black Leather with Recaro"
+              ],
+              "dependencies": {
+                "803A": "Requires 5.2L V8, unique features"
+              },
+              "restrictions": [
+                "4x4 only",
+                "5.5 ft box only"
+              ]
+            }
+          ]
+        },
+        {
+          "length": "6.5 ft",
+          "wheelbase": "157 in",
+          "gvwr_range": "6550-7450 lbs",
+          "drivetrains": [
+            "4x4"
+          ],
+          "trims": [
+            {
+              "name": "XLT",
+              "engines": [
+                {
+                  "name": "5.0L V8",
+                  "axle_ratios": [
+                    "3.31",
+                    "3.55"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.55"
+                  ]
+                }
+              ],
+              "standard_features": "Similar to 5.5ft XLT",
+              "optional_features": "Similar, NA 2.7L, NA PowerBoost",
+              "restrictions": [
+                "4x4 only",
+                "NA PowerBoost, NA 22\" wheels"
+              ]
+            },
+            {
+              "name": "Lariat",
+              "engines": [
+                {
+                  "name": "5.0L V8",
+                  "axle_ratios": [
+                    "3.31"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.55"
+                  ]
+                }
+              ],
+              "restrictions": [
+                "NA PowerBoost, NA 22\" wheels"
+              ]
+            },
+            {
+              "name": "King Ranch",
+              "engines": [
+                {
+                  "name": "5.0L V8",
+                  "axle_ratios": [
+                    "3.31"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.55"
+                  ]
+                }
+              ],
+              "restrictions": [
+                "NA PowerBoost, NA 22\" wheels"
+              ]
+            },
+            {
+              "name": "Platinum",
+              "engines": [
+                {
+                  "name": "5.0L V8",
+                  "axle_ratios": [
+                    "3.31"
+                  ]
+                },
+                {
+                  "name": "3.5L V6 EcoBoost",
+                  "axle_ratios": [
+                    "3.31"
+                  ]
+                }
+              ],
+              "restrictions": [
+                "NA PowerBoost, NA 22\" wheels, NA Max Tow Axle"
+              ]
+            }
+          ]
+        },
+        {
+          "length": "8 ft",
+          "wheelbase": "176 in",
+          "gvwr_range": "6600-7500 lbs",
+          "drivetrains": [
+            "4x2",
+            "4x4"
+          ],
+          "trims": [
+            {
+              "name": "XL",
+              "engines": "Same as other XL, NA PowerBoost",
+              "restrictions": "NA PowerBoost, NA some options"
+            },
+            {
+              "name": "XLT",
+              "engines": "5.0L, 3.5L EcoBoost",
+              "restrictions": "NA 2.7L, PowerBoost"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "global_options": {
+    "emissions": "50-State Emissions (981)",
+    "fuel_tanks": "23 Gal (standard on some), 30.6 Gal, 36 Gal (extended range)"
+  },
+  "notes": "All permutations consider cab, bed, drivetrain, trim, engine, axle, packages, options with dependencies and restrictions applied."
+}
