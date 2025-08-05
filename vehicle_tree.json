@@ -1,6 +1,12 @@
 {
   "brand": "ford",
   "model_year": 2025,
+  "attributes": [
+    {
+      "back_up_camera": true,
+      "fordpass": true
+    }
+  ],
   "tags": [
     "back_up_camera",
     "fordpass"
@@ -8,9 +14,15 @@
   "models": [
     {
       "type": "f-150",
+      "attributes": {
+        "10_inch_touchscreen": true,
+        "truck": true,
+        "10_speed_automatic_transmission": true
+      },
       "tags": [
+        "f150",
         "truck",
-        "10-speed_auto_transmission",
+        "10-speed_automatic_transmission",
         "10-inch_touchscreen",
         "advancetrac"
       ],
@@ -18,29 +30,51 @@
         {
           "type": "regular",
           "attributes": {
+            "two_door": true,
+            "bench_seat": true,
             "seats": 3,
             "manual_seats": true,
+            "seating": [
+              {
+                "type": "cloth",
+                "attributes": {
+                  "cloth": true,
+                  "color": "dark_slate"
+                },
+                "tags": [
+                  "fabric",
+                  "gray"
+                ]
+              },
+              {
+                "type": "vinyl",
+                "attributes": {
+                  "vinyl": true,
+                  "color": "dark_slate"
+                },
+                "tags": [
+                  "easy_to_clean",
+                  "gray"
+                ]
+              }
+            ],
             "drivetrains": [
               {
-                "drivetrains": [
-                  {
-                    "type": "4x2",
-                    "tags": [
-                      "2wd",
-                      "2_wheel_drive",
-                      "two_wheel_drive",
-                      "rwd",
-                      "rear_wheel_drive"
-                    ]
-                  },
-                  {
-                    "type": "4x4",
-                    "tags": [
-                      "4wd",
-                      "4_wheel_drive",
-                      "four_wheel_drive"
-                    ]
-                  }
+                "type": "4x2",
+                "tags": [
+                  "2wd",
+                  "2_wheel_drive",
+                  "two_wheel_drive",
+                  "rwd",
+                  "rear_wheel_drive"
+                ]
+              },
+              {
+                "type": "4x4",
+                "tags": [
+                  "4wd",
+                  "4_wheel_drive",
+                  "four_wheel_drive"
                 ]
               }
             ],
@@ -110,6 +144,11 @@
           "trims": [
             {
               "type": "xl",
+              "attributes": [
+                {
+                  "wheel_size_in": 17
+                }
+              ],
               "bed_lengths": [
                 {
                   "length_ft": 6.5,
@@ -126,12 +165,22 @@
                   "packages": [
                     {
                       "type": "101a",
+                      "attributes": [
+                        {
+                          "steel_wheels": true
+                        }
+                      ],
                       "tags": [
                         "base"
                       ]
                     },
                     {
                       "type": "103a",
+                      "attributes": [
+                        {
+                          "aluminum_wheels": true
+                        }
+                      ],
                       "tags": [
                         "high",
                         "xl_high"
@@ -143,31 +192,7 @@
                       "type": "5.0l_v8",
                       "attributes": {
                         "cylinders": 8,
-                        "displacement_L": 5,
-                        "seating": [
-                          {
-                            "type": "cloth",
-                            "attributes": {
-                              "cloth": true,
-                              "color": "dark_slate"
-                            },
-                            "tags": [
-                              "fabric",
-                              "gray"
-                            ]
-                          },
-                          {
-                            "type": "vinyl",
-                            "attributes": {
-                              "vinyl": true,
-                              "color": "dark_slate"
-                            },
-                            "tags": [
-                              "easy_to_clean",
-                              "gray"
-                            ]
-                          }
-                        ]
+                        "displacement_L": 5
                       },
                       "tags": [
                         "5.0",
@@ -261,27 +286,7 @@
                       "type": "3.5l_v6",
                       "attributes": {
                         "cylinders": 6,
-                        "displacement_L": 3.5,
-                        "drivetrains": [
-                          {
-                            "type": "4x2",
-                            "tags": [
-                              "2wd",
-                              "2_wheel_drive",
-                              "two_wheel_drive",
-                              "rwd",
-                              "rear_wheel_drive"
-                            ]
-                          },
-                          {
-                            "type": "4x4",
-                            "tags": [
-                              "4wd",
-                              "4_wheel_drive",
-                              "four_wheel_drive"
-                            ]
-                          }
-                        ]
+                        "displacement_L": 3.5
                       },
                       "tags": []
                     }
@@ -295,7 +300,27 @@
           "type": "supercab",
           "attributes": {
             "seating_capacity": 6,
-            "bed_lengths_ft": 6.5
+            "bed_lengths_ft": 6.5,
+            "drivetrains": [
+              {
+                "type": "4x2",
+                "tags": [
+                  "2wd",
+                  "2_wheel_drive",
+                  "two_wheel_drive",
+                  "rwd",
+                  "rear_wheel_drive"
+                ]
+              },
+              {
+                "type": "4x4",
+                "tags": [
+                  "4wd",
+                  "4_wheel_drive",
+                  "four_wheel_drive"
+                ]
+              }
+            ]
           },
           "tags": [
             "extended_cab"
@@ -303,15 +328,201 @@
           "trims": [
             {
               "type": "xl",
-              "attributes": {
-                "engines": {}
-              },
-              "tags": []
+              "attributes": [
+                {
+                  "engines": [
+                    {
+                      "type": "5.0l_v8",
+                      "attributes": {
+                        "cylinders": 8,
+                        "displacement_L": 5
+                      },
+                      "tags": [
+                        "5.0",
+                        "coyote",
+                        "mustang"
+                      ]
+                    },
+                    {
+                      "type": "2.7l_v6",
+                      "attributes": {
+                        "cylinders": 6,
+                        "displacement_L": 2.7
+                      },
+                      "tags": []
+                    },
+                    {
+                      "type": "3.5l_v6",
+                      "attributes": {
+                        "cylinders": 6,
+                        "displacement_L": 3.5
+                      },
+                      "tags": []
+                    }
+                  ]
+                }
+              ],
+              "tags": [],
+              "colors": [
+                {
+                  "type": "atlas_blue_metallic",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "blue"
+                  ]
+                },
+                {
+                  "type": "antimatter_blue_metallic",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "blue"
+                  ]
+                },
+                {
+                  "type": "agate_black",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "black"
+                  ]
+                },
+                {
+                  "type": "carbonized_gray",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "gray"
+                  ]
+                },
+                {
+                  "type": "iconic_silver",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "silver"
+                  ]
+                },
+                {
+                  "type": "oxford_white",
+                  "attributes": {
+                    "flat": true
+                  },
+                  "tags": [
+                    "white"
+                  ]
+                }
+              ]
             },
             {
               "type": "stx",
-              "attributes": {},
-              "tags": {}
+              "attributes": [
+                {
+                  "engines": [
+                    {
+                      "type": "5.0l_v8",
+                      "attributes": {
+                        "cylinders": 8,
+                        "displacement_L": 5
+                      },
+                      "tags": [
+                        "5.0",
+                        "coyote",
+                        "mustang"
+                      ]
+                    },
+                    {
+                      "type": "2.7l_v6",
+                      "attributes": {
+                        "cylinders": 6,
+                        "displacement_L": 2.7
+                      },
+                      "tags": []
+                    }
+                  ]
+                }
+              ],
+              "tags": {},
+              "packages": [
+                {
+                  "type": "stx_black_appearance_package",
+                  "colors": [
+                    {
+                      "type": "rapid_red_metallic",
+                      "attributes": [
+                        {
+                          "metallic": true
+                        }
+                      ],
+                      "tags": [
+                        "red"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "colors": [
+                {
+                  "type": "atlas_blue_metallic",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "blue"
+                  ]
+                },
+                {
+                  "type": "antimatter_blue_metallic",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "blue"
+                  ]
+                },
+                {
+                  "type": "agate_black",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "black"
+                  ]
+                },
+                {
+                  "type": "carbonized_gray",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "gray"
+                  ]
+                },
+                {
+                  "type": "iconic_silver",
+                  "attributes": {
+                    "metallic": true
+                  },
+                  "tags": [
+                    "silver"
+                  ]
+                },
+                {
+                  "type": "oxford_white",
+                  "attributes": {
+                    "flat": true
+                  },
+                  "tags": [
+                    "white"
+                  ]
+                }
+              ]
             },
             {
               "type": "xlt",
