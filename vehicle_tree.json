@@ -1,0 +1,649 @@
+{
+  "brand": "ford",
+  "model_year": 2025,
+  "tags": [
+    "back_up_camera",
+    "fordpass"
+  ],
+  "models": [
+    {
+      "type": "f-150",
+      "tags": [
+        "truck",
+        "10-speed_auto_transmission",
+        "10-inch_touchscreen",
+        "advancetrac"
+      ],
+      "body_styles": [
+        {
+          "type": "regular",
+          "attributes": {
+            "seats": 3,
+            "manual_seats": true,
+            "drivetrains": [
+              {
+                "drivetrains": [
+                  {
+                    "type": "4x2",
+                    "tags": [
+                      "2wd",
+                      "2_wheel_drive",
+                      "two_wheel_drive",
+                      "rwd",
+                      "rear_wheel_drive"
+                    ]
+                  },
+                  {
+                    "type": "4x4",
+                    "tags": [
+                      "4wd",
+                      "4_wheel_drive",
+                      "four_wheel_drive"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "colors": [
+              {
+                "type": "atlas_blue_metallic",
+                "attributes": {
+                  "metallic": true
+                },
+                "tags": [
+                  "blue"
+                ]
+              },
+              {
+                "type": "antimatter_blue_metallic",
+                "attributes": {
+                  "metallic": true
+                },
+                "tags": [
+                  "blue"
+                ]
+              },
+              {
+                "type": "agate_black",
+                "attributes": {
+                  "metallic": true
+                },
+                "tags": [
+                  "black"
+                ]
+              },
+              {
+                "type": "carbonized_gray",
+                "attributes": {
+                  "metallic": true
+                },
+                "tags": [
+                  "gray"
+                ]
+              },
+              {
+                "type": "iconic_silver",
+                "attributes": {
+                  "metallic": true
+                },
+                "tags": [
+                  "silver"
+                ]
+              },
+              {
+                "type": "oxford_white",
+                "attributes": {
+                  "flat": true
+                },
+                "tags": [
+                  "white"
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "base",
+            "basic",
+            "work_truck",
+            "long_bed"
+          ],
+          "trims": [
+            {
+              "type": "xl",
+              "bed_lengths": [
+                {
+                  "length_ft": 6.5,
+                  "engines": [
+                    {
+                      "type": "5.0l_v8",
+                      "attributes": {
+                        "cylinders": 8,
+                        "displacement_L": 5,
+                        "seating": [
+                          {
+                            "type": "cloth",
+                            "attributes": {
+                              "cloth": true,
+                              "color": "dark_slate"
+                            },
+                            "tags": [
+                              "fabric",
+                              "gray"
+                            ]
+                          },
+                          {
+                            "type": "vinyl",
+                            "attributes": {
+                              "vinyl": true,
+                              "color": "dark_slate"
+                            },
+                            "tags": [
+                              "easy_to_clean",
+                              "gray"
+                            ]
+                          }
+                        ]
+                      },
+                      "tags": [
+                        "5.0",
+                        "coyote",
+                        "mustang"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "length_ft": 8,
+                  "engines": [
+                    {
+                      "type": "5.0l_v8",
+                      "attributes": {
+                        "cylinders": 8,
+                        "displacement_L": 5
+                      },
+                      "tags": [
+                        "5.0",
+                        "coyote",
+                        "mustang"
+                      ]
+                    },
+                    {
+                      "type": "2.7l_v6",
+                      "attributes": {
+                        "cylinders": 6,
+                        "displacement_L": 2.7
+                      },
+                      "tags": []
+                    },
+                    {
+                      "type": "3.5l_v6",
+                      "attributes": {
+                        "cylinders": 6,
+                        "displacement_L": 3.5,
+                        "drivetrains": [
+                          {
+                            "type": "4x2",
+                            "tags": [
+                              "2wd",
+                              "2_wheel_drive",
+                              "two_wheel_drive",
+                              "rwd",
+                              "rear_wheel_drive"
+                            ]
+                          },
+                          {
+                            "type": "4x4",
+                            "tags": [
+                              "4wd",
+                              "4_wheel_drive",
+                              "four_wheel_drive"
+                            ]
+                          }
+                        ]
+                      },
+                      "tags": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "supercab",
+          "attributes": {
+            "seating_capacity": 6,
+            "bed_lengths_ft": 6.5
+          },
+          "tags": [
+            "extended_cab"
+          ],
+          "trims": [
+            {
+              "type": "xl",
+              "attributes": {
+                "engines": {}
+              },
+              "tags": []
+            },
+            {
+              "type": "stx",
+              "attributes": {},
+              "tags": {}
+            },
+            {
+              "type": "xlt",
+              "attributes": {},
+              "tags": {}
+            }
+          ]
+        },
+        {
+          "type": "SuperCrew",
+          "attributes": {
+            "seating_capacity": 6,
+            "bed_lengths_ft": [
+              5.5,
+              6.5
+            ],
+            "family_suitability": "High"
+          },
+          "tags": [
+            "crew-cab",
+            "family-recommended"
+          ],
+          "drivetrains": [
+            {
+              "type": "4x4",
+              "trims": [
+                {
+                  "series": "XLT",
+                  "attributes": {
+                    "msrp_discount": 2000,
+                    "standard_features": [
+                      "Chrome bumpers",
+                      "LED fog lamps"
+                    ]
+                  },
+                  "tags": [
+                    "mid-range"
+                  ],
+                  "powertrains": [
+                    {
+                      "engine": "3.5L PowerBoost Hybrid V6",
+                      "attributes": {
+                        "hp": 430,
+                        "towing_capacity_lbs": 12700
+                      }
+                    }
+                  ],
+                  "packages": [
+                    {
+                      "name": "Lobo Package",
+                      "tags": [
+                        "sporty",
+                        "new-2025"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "series": "Lariat",
+                  "attributes": {
+                    "msrp_discount": 2000
+                  },
+                  "tags": [
+                    "premium"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Escape",
+      "type": "Compact SUV",
+      "attributes": {
+        "starting_msrp": 29995,
+        "seating_capacity": 5,
+        "towing_max_lbs": 3500,
+        "mpg_city_hwy_estimates": "42/36 (Hybrid)",
+        "family_suitability": "High (compact size for urban families, efficient hybrid options, ample cargo space)",
+        "key_features": [
+          "1.5L EcoBoost or Hybrid powertrains",
+          "SYNC 4 infotainment",
+          "Available AWD",
+          "Co-Pilot360 safety"
+        ]
+      },
+      "tags": [
+        "eco-friendly",
+        "urban-family",
+        "hybrid-available",
+        "affordable"
+      ],
+      "body_styles": [
+        {
+          "type": "Standard SUV",
+          "drivetrains": [
+            {
+              "type": "FWD",
+              "trims": [
+                {
+                  "series": "Active",
+                  "attributes": {
+                    "standard_features": [
+                      "13.2\" touchscreen",
+                      "Wireless Apple CarPlay"
+                    ]
+                  },
+                  "tags": [
+                    "base"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "AWD",
+              "trims": [] // Expand for ST-Line, Platinum, etc.
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "F-250 Super Duty",
+      "type": "Heavy-Duty Pickup Truck",
+      "attributes": {
+        "starting_msrp": 44970,
+        "seating_capacity": "3-6",
+        "towing_max_lbs": 20000,
+        "mpg_city_hwy_estimates": "15/20 (estimated)",
+        "family_suitability": "Medium (great for towing family trailers, but larger size less ideal for daily urban use)",
+        "key_features": [
+          "6.8L V8 or 7.3L V8 engines",
+          "Up to 500 hp",
+          "Pro Power Onboard",
+          "Advanced towing tech"
+        ]
+      },
+      "tags": [
+        "heavy-duty",
+        "towing-beast",
+        "work-family",
+        "diesel-optional"
+      ],
+      "body_styles": [
+        {
+          "type": "Regular Cab",
+          "drivetrains": [] // Similar structure to F-150, expand with XL, XLT, Lariat trims
+        },
+        {
+          "type": "SuperCab",
+          "drivetrains": []
+        },
+        {
+          "type": "Crew Cab",
+          "drivetrains": []
+        }
+      ]
+    },
+    {
+      "name": "Maverick",
+      "type": "Compact Pickup Truck",
+      "attributes": {
+        "starting_msrp": 25515,
+        "seating_capacity": 5,
+        "towing_max_lbs": 4000,
+        "mpg_city_hwy_estimates": "42/33 (Hybrid)",
+        "family_suitability": "High (affordable, efficient, flexible bed for family gear, urban-friendly size)",
+        "key_features": [
+          "2.5L Hybrid standard (191 hp combined)",
+          "Available 2.0L EcoBoost",
+          "FLEXBED system",
+          "4K Tow Package option"
+        ]
+      },
+      "tags": [
+        "compact-truck",
+        "hybrid-standard",
+        "budget-family",
+        "versatile-bed"
+      ],
+      "body_styles": [
+        {
+          "type": "Standard Crew Cab",
+          "drivetrains": [
+            {
+              "type": "FWD",
+              "trims": [
+                {
+                  "series": "XL",
+                  "attributes": {
+                    "standard_features": [
+                      "8\" touchscreen",
+                      "Apple CarPlay"
+                    ]
+                  },
+                  "tags": [
+                    "entry-level"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "AWD",
+              "trims": [] // For XLT, Lariat
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Explorer",
+      "type": "Mid-Size SUV",
+      "attributes": {
+        "starting_msrp": 39755,
+        "seating_capacity": "6-7",
+        "towing_max_lbs": 5000,
+        "mpg_city_hwy_estimates": "20/29",
+        "family_suitability": "High (three rows, advanced safety, tech for kids, towing for boats)",
+        "key_features": [
+          "2.3L EcoBoost (300 hp) or 3.0L V6 (400 hp)",
+          "SYNC 3",
+          "Terrain Management System",
+          "Available hybrid"
+        ]
+      },
+      "tags": [
+        "three-row",
+        "family-adventure",
+        "tech-heavy",
+        "hybrid-optional"
+      ],
+      "body_styles": [
+        {
+          "type": "Standard SUV",
+          "drivetrains": [
+            {
+              "type": "RWD",
+              "trims": [
+                {
+                  "series": "Base",
+                  "tags": [
+                    "value"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "AWD",
+              "trims": [] // ST, Platinum, etc.
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bronco",
+      "type": "Off-Road SUV",
+      "attributes": {
+        "starting_msrp": 39995,
+        "seating_capacity": "4-5",
+        "towing_max_lbs": 4500,
+        "mpg_city_hwy_estimates": "16/17",
+        "family_suitability": "Medium (fun for adventurous families, removable doors/top, but rugged ride)",
+        "key_features": [
+          "2.3L EcoBoost or 2.7L V6",
+          "G.O.A.T. Modes",
+          "Trail Control",
+          "Sasquatch Package"
+        ]
+      },
+      "tags": [
+        "off-road",
+        "adventure-family",
+        "convertible-suv"
+      ],
+      "body_styles": [
+        {
+          "type": "2-Door",
+          "drivetrains": [] // 4x4 only
+        },
+        {
+          "type": "4-Door",
+          "drivetrains": []
+        }
+      ]
+    },
+    {
+      "name": "Mustang",
+      "type": "Sports Car",
+      "attributes": {
+        "starting_msrp": 31920,
+        "seating_capacity": 4,
+        "towing_max_lbs": "Not recommended",
+        "mpg_city_hwy_estimates": "22/33",
+        "family_suitability": "Low (performance-focused, limited space)",
+        "key_features": [
+          "2.3L EcoBoost (315 hp) or 5.0L V8 (500 hp)",
+          "MagniRide damping",
+          "Available Dark Horse trim"
+        ]
+      },
+      "tags": [
+        "performance",
+        "iconic",
+        "coupe-convertible"
+      ],
+      "body_styles": [
+        {
+          "type": "Coupe",
+          "drivetrains": [] // RWD
+        },
+        {
+          "type": "Convertible",
+          "drivetrains": []
+        }
+      ]
+    },
+    {
+      "name": "Edge",
+      "type": "Mid-Size Crossover SUV",
+      "attributes": {
+        "starting_msrp": 38950,
+        "seating_capacity": 5,
+        "towing_max_lbs": 3500,
+        "mpg_city_hwy_estimates": "21/28",
+        "family_suitability": "High (spacious interior, AWD option, tech features)",
+        "key_features": [
+          "2.0L EcoBoost (250 hp)",
+          "SYNC 4A",
+          "Co-Pilot360 Assist+"
+        ]
+      },
+      "tags": [
+        "crossover",
+        "comfort-family",
+        "sporty-handling"
+      ],
+      "body_styles": [
+        {
+          "type": "Standard SUV",
+          "drivetrains": [
+            {
+              "type": "AWD",
+              "trims": [] // SE, SEL, ST-Line, Titanium
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Expedition",
+      "type": "Full-Size SUV",
+      "attributes": {
+        "starting_msrp": 57925,
+        "seating_capacity": "7-8",
+        "towing_max_lbs": 9300,
+        "mpg_city_hwy_estimates": "16/22",
+        "family_suitability": "High (large space for big families, luxury options, heavy towing)",
+        "key_features": [
+          "3.5L EcoBoost V6 (400 hp)",
+          "Panoramic Vista Roof",
+          "BlueCruise",
+          "Available MAX extended length"
+        ]
+      },
+      "tags": [
+        "large-family",
+        "luxury-suv",
+        "towing-strong"
+      ],
+      "body_styles": [
+        {
+          "type": "Standard",
+          "drivetrains": [] // 4x2/4x4
+        },
+        {
+          "type": "MAX (Extended)",
+          "drivetrains": []
+        }
+      ]
+    },
+    {
+      "name": "Ranger",
+      "type": "Mid-Size Pickup Truck",
+      "attributes": {
+        "starting_msrp": 32945,
+        "seating_capacity": 5,
+        "towing_max_lbs": 7500,
+        "mpg_city_hwy_estimates": "21/25",
+        "family_suitability": "Medium (versatile for smaller families, off-road capable)",
+        "key_features": [
+          "2.3L EcoBoost (270 hp)",
+          "Available 2.7L V6",
+          "FX4 Off-Road Package",
+          "SuperCrew cab"
+        ]
+      },
+      "tags": [
+        "mid-size-truck",
+        "adventure",
+        "efficient"
+      ],
+      "body_styles": [
+        {
+          "type": "SuperCab",
+          "drivetrains": []
+        },
+        {
+          "type": "SuperCrew",
+          "drivetrains": []
+        }
+      ]
+    }
+  ]
+}
