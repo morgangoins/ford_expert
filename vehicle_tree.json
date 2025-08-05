@@ -113,6 +113,31 @@
               "bed_lengths": [
                 {
                   "length_ft": 6.5,
+                  "axle_types": [
+                    {
+                      "type": "3.73_electronic_locking",
+                      "attributes": {
+                        "locking": true,
+                        "axle_ratio": 3.73
+                      },
+                      "tags": []
+                    }
+                  ],
+                  "packages": [
+                    {
+                      "type": "101a",
+                      "tags": [
+                        "base"
+                      ]
+                    },
+                    {
+                      "type": "103a",
+                      "tags": [
+                        "high",
+                        "xl_high"
+                      ]
+                    }
+                  ],
                   "engines": [
                     {
                       "type": "5.0l_v8",
@@ -154,6 +179,63 @@
                 },
                 {
                   "length_ft": 8,
+                  "packages": [
+                    {
+                      "type": "101a",
+                      "tags": [
+                        "base"
+                      ]
+                    },
+                    {
+                      "type": "103a",
+                      "tags": [
+                        "high",
+                        "xl_high"
+                      ]
+                    }
+                  ],
+                  "axle_types": [
+                    {
+                      "type": "3.55_non_limited_slip",
+                      "attributes": {
+                        "locking": false,
+                        "axle_ratio": 3.55
+                      },
+                      "tags": []
+                    },
+                    {
+                      "type": "3.73_electronic_locking",
+                      "attributes": {
+                        "locking": true,
+                        "axle_ratio": 3.73
+                      },
+                      "tags": []
+                    },
+                    {
+                      "type": "3.55_electronic_locking",
+                      "attributes": {
+                        "locking": true,
+                        "axle_ratio": 3.55
+                      },
+                      "tags": []
+                    },
+                    {
+                      "type": "3.31_non_limited_slip",
+                      "attributes": {
+                        "locking": false,
+                        "axle_ratio": 3.31
+                      },
+                      "tags": []
+                    },
+                    {
+                      "type": "3.31_electronic_locking",
+                      "attributes": {
+                        "locking": true,
+                        "axle_ratio": 3.31
+                      },
+                      "tags": []
+                    }
+                  ],
                   "engines": [
                     {
                       "type": "5.0l_v8",
