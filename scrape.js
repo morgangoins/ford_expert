@@ -1,13 +1,18 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-(async () => {
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-  await page.goto('https://www.fordfairfield.com/new-inventory/index.htm?start=0', { waitUntil: 'networkidle2' });
-  await page.waitForSelector('.vehicle-card');
+async function scrapeCarAtIndex(page, index) {
+  const url = `https://www.fordfairfield.com/new-inventory/index.htm?start=${index}`;
+  await page.goto(url, { waitUntil: 'networkidle2' });
 
-  const card = await page.$('.vehicle-card'); // First card
+  try {
+    await page.waitForSelector('.vehicle-card', { timeout: 8000 });
+  } catch (e) {
+    return null; // No card found
+  }
+
+  const card = await page.$('.vehicle-card');
+  if (!card) return null;
 
   let title = 'N/A';
   try {
@@ -34,34 +39,63 @@ const fs = require('fs');
     pricingText = await card.$eval('.pricing-detail.inv-type-new', el => el.textContent.trim());
   } catch {}
 
-  const msrpMatch = pricingText.match(/MSRP\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const msrpMatch = pricingText.match(/MSRP\d*\s*([\-\+]?)\s*\$?([\d,]+)/i);
   const msrp = msrpMatch ? (msrpMatch[1] || '') + msrpMatch[2] : 'N/A';
 
-  const discountMatch = pricingText.match(/Discount(s?)\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const discountMatch = pricingText.match(/Discount(s?)\d*\s*([\-\+]?)\s*\$?([\d,]+)/i);
   const discounts = discountMatch ? (discountMatch[2] || '') + discountMatch[3] : 'N/A';
 
-  const rebateMatch = pricingText.match(/Rebate(s?)\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const rebateMatch = pricingText.match(/Rebate(s?)\d*\s*([\-\+]?)\s*\$?([\d,]+)/i);
   const rebates = rebateMatch ? (rebateMatch[2] || '') + rebateMatch[3] : 'N/A';
 
-  const retailMatch = pricingText.match(/Retail Price\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const retailMatch = pricingText.match(/Retail Price\d*\s*([\-\+]?)\s*\$?([\d,]+)/i);
   const retail = retailMatch ? (retailMatch[1] || '') + retailMatch[2] : 'N/A';
 
-  const csv = `index,title,stock,vin,msrp,discounts,rebates,retail_price,exterior,interior,status,mpg\n0,"${title.replace(/"/g, '""')}","${stock.replace(/"/g, '""')}","${vin.replace(/"/g, '""')}","${msrp.replace(/"/g, '""')}","${discounts.replace(/"/g, '""')}","${rebates.replace(/"/g, '""')}","${retail.replace(/"/g, '""')}","${exterior.replace(/"/g, '""')}","${interior.replace(/"/g, '""')}","${status.replace(/"/g, '""')}","${mpg.replace(/"/g, '""')}"`;
-  fs.writeFileSync('car_data.csv', csv);
+  if (!vin || vin === 'N/A') {
+    return null; // Stop when no VIN is present
+  }
 
-  console.log('CSV saved: car_data.csv');
-  console.log('Debug pricingText:', pricingText);
-  console.log('Debug msrp:', msrp);
-  console.log('Debug discounts:', discounts);
-  console.log('Debug rebates:', rebates);
-  console.log('Debug retail:', retail);
-  console.log('Debug description:', description);
-  console.log('Debug stock:', stock);
-  console.log('Debug vin:', vin);
-  console.log('Debug exterior:', exterior);
-  console.log('Debug interior:', interior);
-  console.log('Debug status:', status);
-  console.log('Debug mpg:', mpg);
+  return {
+    index,
+    title,
+    stock,
+    vin,
+    msrp,
+    discounts,
+    rebates,
+    retail,
+    exterior,
+    interior,
+    status,
+    mpg
+  };
+}
 
+(async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+
+  // Start fresh CSV with header
+  const header = 'index,title,stock,vin,msrp,discounts,rebates,retail_price,exterior,interior,status,mpg';
+  fs.writeFileSync('car_data.csv', header + '\n');
+
+  let index = 0;
+  let count = 0;
+
+  while (true) {
+    const car = await scrapeCarAtIndex(page, index);
+    if (!car) break;
+
+    const row = `${car.index},"${car.title.replace(/"/g, '""')}","${car.stock.replace(/"/g, '""')}","${car.vin.replace(/"/g, '""')}","${car.msrp.replace(/"/g, '""')}","${car.discounts.replace(/"/g, '""')}","${car.rebates.replace(/"/g, '""')}","${car.retail.replace(/"/g, '""')}","${car.exterior.replace(/"/g, '""')}","${car.interior.replace(/"/g, '""')}","${car.status.replace(/"/g, '""')}","${car.mpg.replace(/"/g, '""')}"`;
+    fs.appendFileSync('car_data.csv', row + '\n');
+
+    process.stdout.write(`Scraped index ${index}: ${car.vin}\n`);
+    index += 1;
+    count += 1;
+  }
+
+  console.log(`Done. Total vehicles scraped: ${count}. Last index attempted: ${index}.`);
   await browser.close();
 })();
+
+
