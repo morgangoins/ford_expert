@@ -1,84 +1,67 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const path = require('path');
-const fetch = require('node-fetch');
 
-async function scrapeInventory() {
+(async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  let currentUrl = 'https://www.fordfairfield.com/new-inventory/index.htm?start=0';
-  const data = [];
-  const photosFolder = 'photos';
-  if (!fs.existsSync(photosFolder)) fs.mkdirSync(photosFolder);
+  await page.goto('https://www.fordfairfield.com/new-inventory/index.htm?start=0', { waitUntil: 'networkidle2' });
+  await page.waitForSelector('.vehicle-card');
 
-  while (true) {
-    await page.goto(currentUrl, { waitUntil: 'networkidle2' });
-    const cards = await page.$$('.vehicle-card');
-    if (cards.length === 0) break;
+  const card = await page.$('.vehicle-card'); // First card
 
-    for (const card of cards) {
-      const title = await card.evaluate(el => el.querySelector('.vehicle-card-title')?.textContent.trim() || '');
-      const descText = await card.evaluate(el => el.querySelector('.vehicle-card-description')?.textContent.trim() || '');
-      const priceText = await card.evaluate(el => el.querySelector('.pricing-detail')?.textContent.trim() || '');
+  let title = 'N/A';
+  try {
+    title = await card.$eval('.vehicle-card-title.inv-type-new', el => el.textContent.trim());
+  } catch {}
 
-      const stockMatch = descText.match(/Stock #\s*([\w-]+)/i);
-      const vinMatch = descText.match(/VIN\s*([\w\d]+)/i);
-      const stock = stockMatch ? stockMatch[1] : '';
-      const vin = vinMatch ? vinMatch[1] : '';
+  let description = 'N/A', stock = 'N/A', vin = 'N/A', exterior = 'N/A', interior = 'N/A', status = 'N/A', mpg = 'N/A';
+  let descriptionItems = [];
+  try {
+    descriptionItems = await card.$$eval('.vehicle-card-description.single-col li', lis => lis.map(li => li.textContent.trim()));
+    description = descriptionItems.join('\n');
+    descriptionItems.forEach(item => {
+      if (item.startsWith('Stock #')) stock = item.replace(/Stock #\s*(:)?\s*/, '').trim();
+      if (item.startsWith('VIN')) vin = item.replace(/VIN\s*(:)?\s*/, '').trim();
+      if (item.endsWith('Exterior')) exterior = item.replace(/ Exterior$/, '').trim();
+      if (item.endsWith('Interior')) interior = item.replace(/ Interior$/, '').trim();
+      if (item === 'IN STOCK' || item === 'IN TRANSIT') status = item.trim();
+      if (item.includes('MPG City/Hwy')) mpg = item.replace(/ MPG City\/Hwy$/, '').trim();
+    });
+  } catch {}
 
-      const msrpMatch = priceText.match(/MSRP\s*\$([\d,]+)/i);
-      const discountMatch = priceText.match(/Discount\s*-\$([\d,]+)/i);
-      const rebateMatch = priceText.match(/Rebate\s*-\$([\d,]+)/i);
-      const retailMatch = priceText.match(/Retail Price\s*\$([\d,]+)/i);
-      const msrp = msrpMatch ? msrpMatch[1] : '';
-      const discount = discountMatch ? discountMatch[1] : '';
-      const rebate = rebateMatch ? rebateMatch[1] : '';
-      const retail = retailMatch ? retailMatch[1] : '';
+  let pricingText = 'N/A';
+  try {
+    pricingText = await card.$eval('.pricing-detail.inv-type-new', el => el.textContent.trim());
+  } catch {}
 
-      // Collect all photos without clicking
-      const photos = await card.evaluate(el => {
-        const imgs = el.querySelectorAll('.vehicle-card-photo img, .carousel-item img');
-        return Array.from(imgs).map(img => img.src || img.getAttribute('data-src') || '').filter(src => src);
-      });
+  const msrpMatch = pricingText.match(/MSRP\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const msrp = msrpMatch ? (msrpMatch[1] || '') + msrpMatch[2] : 'N/A';
 
-      // Add to data
-      data.push({ title, stock, vin, description: descText, msrp, discount, rebate, retail, photos: photos.join(',') });
+  const discountMatch = pricingText.match(/Discount(s?)\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const discounts = discountMatch ? (discountMatch[2] || '') + discountMatch[3] : 'N/A';
 
-      // Download photos later
-    }
+  const rebateMatch = pricingText.match(/Rebate(s?)\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const rebates = rebateMatch ? (rebateMatch[2] || '') + rebateMatch[3] : 'N/A';
 
-    // Get next URL from pagination
-    const nextHref = await page.evaluate(() => document.querySelector('.pagination .next a, .page-next a')?.href || null);
-    if (!nextHref) break;
-    currentUrl = nextHref;
-  }
+  const retailMatch = pricingText.match(/Retail Price\d*\s*([-\+]?)\s*\$?([\d,]+)/i);
+  const retail = retailMatch ? (retailMatch[1] || '') + retailMatch[2] : 'N/A';
 
-  // Download all photos
-  for (const item of data) {
-    const vin = item.vin || 'unknown';
-    const photoUrls = item.photos.split(',');
-    for (let i = 0; i < photoUrls.length; i++) {
-      const url = photoUrls[i];
-      if (url) {
-        try {
-          const res = await fetch(url);
-          const buffer = await res.buffer();
-          fs.writeFileSync(path.join(photosFolder, `${vin}_${i + 1}.jpg`), buffer);
-        } catch (e) {
-          console.error(`Failed to download ${url}: ${e}`);
-        }
-      }
-    }
-  }
+  const csv = `index,title,stock,vin,msrp,discounts,rebates,retail_price,exterior,interior,status,mpg\n0,"${title.replace(/"/g, '""')}","${stock.replace(/"/g, '""')}","${vin.replace(/"/g, '""')}","${msrp.replace(/"/g, '""')}","${discounts.replace(/"/g, '""')}","${rebates.replace(/"/g, '""')}","${retail.replace(/"/g, '""')}","${exterior.replace(/"/g, '""')}","${interior.replace(/"/g, '""')}","${status.replace(/"/g, '""')}","${mpg.replace(/"/g, '""')}"`;
+  fs.writeFileSync('car_data.csv', csv);
+
+  console.log('CSV saved: car_data.csv');
+  console.log('Debug pricingText:', pricingText);
+  console.log('Debug msrp:', msrp);
+  console.log('Debug discounts:', discounts);
+  console.log('Debug rebates:', rebates);
+  console.log('Debug retail:', retail);
+  console.log('Debug description:', description);
+  console.log('Debug stock:', stock);
+  console.log('Debug vin:', vin);
+  console.log('Debug exterior:', exterior);
+  console.log('Debug interior:', interior);
+  console.log('Debug status:', status);
+  console.log('Debug mpg:', mpg);
 
   await browser.close();
-
-  // Write CSV
-  const csvHeader = 'Title,Stock,VIN,Description,MSRP,Discount,Rebate,Retail,Photos\n';
-  const csvRows = data.map(d => `"${d.title.replace(/"/g, '""')}","${d.stock}","${d.vin}","${d.description.replace(/"/g, '""')}","${d.msrp}","${d.discount}","${d.rebate}","${d.retail}","${d.photos.replace(/"/g, '""')}"`);
-  fs.writeFileSync('vehicles.csv', csvHeader + csvRows.join('\n'));
-
-  console.log('Scraped! Check vehicles.csv and photos folder.');
-}
-
-scrapeInventory();
+})();
