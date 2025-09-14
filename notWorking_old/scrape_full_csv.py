@@ -1,5 +1,5 @@
 import requests
-import json
+import csv
 
 url = "https://www.fordfairfield.com/api/widget/ws-inv-data/getInventory"
 
@@ -53,8 +53,35 @@ while True:
 
     start_index += page_size
 
-# ✅ Save everything into one JSON file
-with open("inventory_full.json", "w", encoding="utf-8") as f:
-    json.dump(all_vehicles, f, indent=2, ensure_ascii=False)
+# ✅ Now write ALL collected vehicles into CSV
+with open("inventory_full.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow([
+        "year", "make", "model", "trim", "vin", "stockNumber",
+        "msrp", "internetPrice", "salePrice", "mileage",
+        "extColor", "intColor", "bodyStyle", "engine", "transmission",
+        "driveLine", "status", "primary_image_url"
+    ])
+    for v in all_vehicles:
+        writer.writerow([
+            v.get("year"),
+            v.get("make"),
+            v.get("model"),
+            v.get("trim"),
+            v.get("vin"),
+            v.get("stockNumber"),
+            v.get("msrp"),
+            v.get("internetPrice"),
+            v.get("salePrice"),
+            v.get("mileage"),
+            v.get("extColor"),
+            v.get("intColor"),
+            v.get("bodyStyle"),
+            v.get("engine"),
+            v.get("transmission"),
+            v.get("driveLine"),
+            v.get("status"),
+            (v.get("primary_image") or {}).get("url")
+        ])
 
-print(f"✅ Saved {len(all_vehicles)} vehicles to inventory_full.json")
+print(f"✅ Saved {len(all_vehicles)} vehicles to inventory_full.csv")
