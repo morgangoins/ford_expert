@@ -30,17 +30,36 @@ def get_vehicles():
     body_style_filter = request.args.get('body_style', '')
     min_price = request.args.get('min_price', type=float)
     max_price = request.args.get('max_price', type=float)
+    sort_by = request.args.get('sort', '')
     
     # Start with all data
     filtered_df = df.copy()
     
-    # Apply search filter
+    # Apply search filter with robustness
     if search:
+        # Normalize search term for robustness (remove hyphens, spaces, make lowercase)
+        normalized_search = search.replace('-', '').replace(' ', '').lower()
+        
         search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine']
-        search_mask = filtered_df[search_cols].astype(str).apply(
-            lambda x: x.str.contains(search, case=False, na=False)
-        ).any(axis=1)
-        filtered_df = filtered_df[search_mask]
+        
+        try:
+            # Original search
+            original_mask = filtered_df[search_cols].astype(str).apply(
+                lambda x: x.str.contains(search, case=False, na=False, regex=False)
+            ).any(axis=1)
+            
+            # Normalized search (remove hyphens and spaces)
+            normalized_mask = filtered_df[search_cols].astype(str).apply(
+                lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_search, case=False, na=False, regex=False)
+            ).any(axis=1)
+            
+            # Combine both search approaches
+            search_mask = original_mask | normalized_mask
+            filtered_df = filtered_df[search_mask]
+            
+        except Exception as e:
+            # Fallback to simple search if there's any error
+            print(f"Search error: {e}")
     
     # Apply filters
     if model_filter:
@@ -51,10 +70,19 @@ def get_vehicles():
         filtered_df = filtered_df[filtered_df['Trim'] == trim_filter]
     if body_style_filter:
         filtered_df = filtered_df[filtered_df['Body Style'] == body_style_filter]
-    if min_price:
+    if min_price is not None:
         filtered_df = filtered_df[filtered_df['MSRP_numeric'] >= min_price]
-    if max_price:
+    if max_price is not None:
         filtered_df = filtered_df[filtered_df['MSRP_numeric'] <= max_price]
+    
+    # Apply sorting
+    if sort_by == 'price_low':
+        filtered_df = filtered_df.sort_values('MSRP_numeric', ascending=True)
+    elif sort_by == 'price_high':
+        filtered_df = filtered_df.sort_values('MSRP_numeric', ascending=False)
+    else:
+        # Default sort by year desc, then model
+        filtered_df = filtered_df.sort_values(['Year', 'Model'], ascending=[False, True])
     
     # Calculate pagination
     total = len(filtered_df)
