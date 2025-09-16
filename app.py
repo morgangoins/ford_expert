@@ -61,6 +61,12 @@ def get_vehicles():
     start = (page - 1) * per_page
     end = start + per_page
     
+    # Helper function to handle NaN values
+    def safe_value(value):
+        if pd.isna(value):
+            return ''
+        return value
+    
     # Get page data
     page_data = filtered_df.iloc[start:end]
     
@@ -70,14 +76,8 @@ def get_vehicles():
         # Use real photo URLs from scraped data
         photo_urls_str = safe_value(row['Photo URLs'])
         photos = [url.strip() for url in photo_urls_str.split(',') if url.strip()] if photo_urls_str else [
-            "https://via.placeholder.com/400x300/2a2a2a/ffffff?text=No+Image"
+            "https://via.placeholder.com/280x180/2a2a2a/666?text=No+Image"
         ]
-        
-        # Helper function to handle NaN values
-        def safe_value(value):
-            if pd.isna(value):
-                return ''
-            return value
         
         vehicle = {
             'vin': safe_value(row['VIN']),
