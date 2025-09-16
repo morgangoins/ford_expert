@@ -276,11 +276,31 @@ class VehicleInventory {
         document.querySelectorAll('.clickable-value').forEach(element => {
             element.addEventListener('click', async (e) => {
                 const textToCopy = e.target.getAttribute('data-copy');
+                const originalText = e.target.textContent;
+                
                 try {
-                    await navigator.clipboard.writeText(textToCopy);
+                    // Try modern clipboard API first (requires HTTPS)
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(textToCopy);
+                    } else {
+                        // Fallback for HTTP/older browsers using deprecated execCommand
+                        const textArea = document.createElement('textarea');
+                        textArea.value = textToCopy;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        textArea.style.top = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        const successful = document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        
+                        if (!successful) {
+                            throw new Error('execCommand copy failed');
+                        }
+                    }
                     
                     // Show "COPIED" feedback
-                    const originalText = e.target.textContent;
                     e.target.textContent = 'COPIED';
                     e.target.style.color = '#00cc66';
                     e.target.style.fontWeight = '600';
@@ -291,9 +311,10 @@ class VehicleInventory {
                         e.target.style.color = '';
                         e.target.style.fontWeight = '';
                     }, 1500);
+                    
                 } catch (err) {
                     console.error('Failed to copy text: ', err);
-                    // Fallback for older browsers
+                    // Show error feedback
                     e.target.textContent = 'COPY FAILED';
                     e.target.style.color = '#ff6666';
                     setTimeout(() => {

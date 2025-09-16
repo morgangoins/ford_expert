@@ -74,6 +74,12 @@ The scraper extracts the following vehicle information:
 - Built responsive frontend with vehicle cards and photo carousels
 - Configured deployment for autoscale hosting
 - Fixed JSON serialization issues for proper API responses
+- Added sort functionality with price low-to-high and high-to-low options
+- Enhanced search robustness to handle variations like f150/f-150, v8/v-8
+- Implemented multi-parameter search (e.g., "f150 v8", "white f-250 xlt tremor")
+- Extended search to include VIN and Stock Number fields
+- Added clipboard copy functionality for VIN/Stock with fallback for HTTP environments
+- Removed MPG field from vehicle cards for cleaner layout
 
 ## Project State
 - ✅ Scripts working and tested
