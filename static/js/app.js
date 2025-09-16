@@ -136,8 +136,8 @@ class VehicleInventory {
         // Setup photo carousels
         this.setupCarousels();
         
-        // Setup clipboard copy functionality
-        this.setupClipboardCopy();
+        // Setup clipboard copy functionality - add event delegation to handle dynamically created elements
+        this.setupClipboardCopyDelegation();
     }
 
     setupCarousels() {
@@ -272,11 +272,17 @@ class VehicleInventory {
         this.loadVehicles();
     }
 
-    setupClipboardCopy() {
-        document.querySelectorAll('.clickable-value').forEach(element => {
-            element.addEventListener('click', async (e) => {
+    setupClipboardCopyDelegation() {
+        // Use event delegation on the vehicles grid container to handle dynamically created elements
+        const vehiclesGrid = document.getElementById('vehicles-grid');
+        
+        vehiclesGrid.addEventListener('click', async (e) => {
+            // Check if the clicked element has the clickable-value class
+            if (e.target.classList.contains('clickable-value')) {
                 const textToCopy = e.target.getAttribute('data-copy');
                 const originalText = e.target.textContent;
+                
+                if (!textToCopy) return;
                 
                 try {
                     // Try modern clipboard API first (requires HTTPS)
@@ -313,7 +319,6 @@ class VehicleInventory {
                     }, 1500);
                     
                 } catch (err) {
-                    console.error('Failed to copy text: ', err);
                     // Show error feedback
                     e.target.textContent = 'COPY FAILED';
                     e.target.style.color = '#ff6666';
@@ -322,7 +327,7 @@ class VehicleInventory {
                         e.target.style.color = '';
                     }, 1500);
                 }
-            });
+            }
         });
     }
 
