@@ -233,6 +233,7 @@ class VehicleInventory {
         document.getElementById('body-style-filter').addEventListener('change', (e) => this.updateFilter('body_style', e.target.value));
         document.getElementById('min-price').addEventListener('change', (e) => this.updateFilter('min_price', e.target.value));
         document.getElementById('max-price').addEventListener('change', (e) => this.updateFilter('max_price', e.target.value));
+        document.getElementById('sort-select').addEventListener('change', (e) => this.updateFilter('sort', e.target.value));
 
         // Clear filters
         document.getElementById('clear-filters').addEventListener('click', () => this.clearFilters());
@@ -267,6 +268,7 @@ class VehicleInventory {
         document.getElementById('body-style-filter').value = '';
         document.getElementById('min-price').value = '';
         document.getElementById('max-price').value = '';
+        document.getElementById('sort-select').value = '';
         
         this.loadVehicles();
     }
