@@ -22,7 +22,12 @@ df_used['MSRP'] = df_used['Retail Price']  # Use retail price as display price
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Add cache control headers to prevent browser caching during development
+    response = app.make_response(render_template('index.html'))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route('/api/vehicles')
 def get_vehicles():
