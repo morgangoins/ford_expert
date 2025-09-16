@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ford Vehicle Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ford Vehicle Inventory</h1>
+            <div class="search-bar">
+                <input type="text" id="search" placeholder="Search vehicles by model, trim, color, engine...">
+                <button id="search-btn">Search</button>
+            </div>
+        </header>
+
+        <div class="filters-section">
+            <h3>Filters</h3>
+            <div class="filters">
+                <select id="model-filter">
+                    <option value="">All Models</option>
+                </select>
+                <select id="year-filter">
+                    <option value="">All Years</option>
+                </select>
+                <select id="trim-filter">
+                    <option value="">All Trims</option>
+                </select>
+                <select id="body-style-filter">
+                    <option value="">All Body Styles</option>
+                </select>
+                <div class="price-filter">
+                    <label>Price Range:</label>
+                    <input type="number" id="min-price" placeholder="Min Price">
+                    <input type="number" id="max-price" placeholder="Max Price">
+                </div>
+                <button id="clear-filters">Clear Filters</button>
+            </div>
+        </div>
+
+        <div class="results-info">
+            <span id="results-count">Loading vehicles...</span>
+        </div>
+
+        <div class="vehicles-grid" id="vehicles-grid">
+            <!-- Vehicle cards will be populated here -->
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be populated here -->
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
