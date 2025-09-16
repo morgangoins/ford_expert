@@ -144,6 +144,15 @@ body {
     font-size: 12px;
     margin-left: auto;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.inventory-status {
+    font-size: 11px;
+    color: #666;
 }
 
 /* Main Content Layout */
@@ -319,6 +328,7 @@ body {
     font-weight: 700;
     color: #00cc66;
     margin-bottom: 8px;
+    flex: 1;
 }
 
 .vehicle-details {
@@ -362,29 +372,33 @@ body {
     text-decoration: underline;
 }
 
-.carfax-container {
-    margin-top: 12px;
-    padding-top: 8px;
-    border-top: 1px solid #333;
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-.carfax-btn {
+.carfax-btn-inline {
     display: inline-block;
-    padding: 6px 12px;
-    background-color: #ff6600;
-    color: white;
+    padding: 3px 6px;
+    background-color: #444;
+    color: #ccc;
     text-decoration: none;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: background-color 0.2s;
-    border: none;
+    transition: all 0.2s;
+    border: 1px solid #666;
     font-family: inherit;
+    flex-shrink: 0;
 }
 
-.carfax-btn:hover {
-    background-color: #e55a00;
+.carfax-btn-inline:hover {
+    background-color: #555;
+    color: #fff;
+    border-color: #777;
 }
 
 .pagination {

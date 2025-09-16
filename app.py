@@ -2,6 +2,8 @@ from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import pandas as pd
 import json
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -186,6 +188,22 @@ def get_filters():
         }
     }
     return jsonify(filters)
+
+@app.route('/api/inventory-status')
+def get_inventory_status():
+    """Get inventory last update timestamps"""
+    try:
+        new_modified = os.path.getmtime('inventoryNew.csv')
+        used_modified = os.path.getmtime('inventoryUsed.csv')
+        
+        return jsonify({
+            'new_updated': datetime.fromtimestamp(new_modified).strftime('%Y-%m-%d %I:%M %p'),
+            'used_updated': datetime.fromtimestamp(used_modified).strftime('%Y-%m-%d %I:%M %p'),
+            'new_count': len(df_new),
+            'used_count': len(df_used)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

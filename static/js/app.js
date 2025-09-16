@@ -11,6 +11,7 @@ class VehicleInventory {
         await this.loadFilters();
         await this.loadVehicles();
         this.setupEventListeners();
+        this.loadInventoryStatus();
     }
 
     async loadFilters() {
@@ -77,7 +78,7 @@ class VehicleInventory {
             <div class="vehicle-card">
                 <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
                     ${vehicle.photos.map((photo, index) => `
-                        <img src="${photo}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}" 
+                        <img ${index === 0 ? `src="${photo}"` : `data-src="${photo}"`} alt="${vehicle.year} ${vehicle.make} ${vehicle.model}" 
                              class="${index === 0 ? 'active' : ''}" data-index="${index}" 
                              onerror="this.src='https://via.placeholder.com/280x180/2a2a2a/666?text=NO+IMAGE'">
                     `).join('')}
@@ -99,7 +100,12 @@ class VehicleInventory {
                 
                 <div class="vehicle-info">
                     <div class="vehicle-title">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</div>
-                    <div class="vehicle-price">${vehicle.msrp}</div>
+                    <div class="price-row">
+                        <div class="vehicle-price">${vehicle.msrp}</div>
+                        ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
+                        <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn-inline">CARFAX</a>
+                        ` : ''}
+                    </div>
                     
                     <div class="vehicle-details">
                         <div class="detail-row">
@@ -131,12 +137,6 @@ class VehicleInventory {
                             <span class="detail-value">${vehicle.transmission}</span>
                         </div>
                     </div>
-                    
-                    ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
-                    <div class="carfax-container">
-                        <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn">CARFAX</a>
-                    </div>
-                    ` : ''}
                 </div>
             </div>
         `).join('');
@@ -148,6 +148,22 @@ class VehicleInventory {
         this.setupClipboardCopyDelegation();
     }
 
+    async loadInventoryStatus() {
+        try {
+            const response = await fetch('/api/inventory-status');
+            const status = await response.json();
+            const statusEl = document.getElementById('inventory-status');
+            
+            if (this.inventoryType === 'new') {
+                statusEl.textContent = `New: ${status.new_count} vehicles • Updated: ${status.new_updated}`;
+            } else {
+                statusEl.textContent = `Used: ${status.used_count} vehicles • Updated: ${status.used_updated}`;
+            }
+        } catch (error) {
+            console.error('Error loading inventory status:', error);
+        }
+    }
+
     setupCarousels() {
         document.querySelectorAll('.photo-carousel').forEach(carousel => {
             let currentIndex = 0;
@@ -155,6 +171,13 @@ class VehicleInventory {
             const indicators = carousel.querySelectorAll('.indicator');
 
             const showPhoto = (index) => {
+                // Lazy load the image if it hasn't been loaded yet
+                const targetImg = images[index];
+                if (targetImg && targetImg.hasAttribute('data-src')) {
+                    targetImg.src = targetImg.getAttribute('data-src');
+                    targetImg.removeAttribute('data-src');
+                }
+                
                 images.forEach((img, i) => {
                     img.classList.toggle('active', i === index);
                 });
@@ -285,6 +308,7 @@ class VehicleInventory {
         // Reload filters and vehicles for new inventory type
         this.loadFilters();
         this.loadVehicles();
+        this.loadInventoryStatus();
     }
 
     clearFilterOptions() {
