@@ -38,7 +38,7 @@ def get_vehicles():
     # Apply multi-parameter search filter with robustness
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
-        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine']
+        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number']
         
         try:
             # For each search term, create a mask that checks if it matches in any column

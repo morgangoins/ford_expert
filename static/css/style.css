@@ -318,6 +318,16 @@ body {
     white-space: nowrap;
 }
 
+.clickable-value {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.clickable-value:hover {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
 .pagination {
     display: flex;
     justify-content: center;

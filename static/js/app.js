@@ -102,11 +102,11 @@ class VehicleInventory {
                     <div class="vehicle-details">
                         <div class="detail-row">
                             <span class="detail-label">VIN:</span>
-                            <span class="detail-value">${vehicle.vin}</span>
+                            <span class="detail-value clickable-value" data-copy="${vehicle.vin}" title="Click to copy">${vehicle.vin}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">STOCK:</span>
-                            <span class="detail-value">${vehicle.stock_number}</span>
+                            <span class="detail-value clickable-value" data-copy="${vehicle.stock_number}" title="Click to copy">${vehicle.stock_number}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">EXTERIOR:</span>
@@ -135,6 +135,9 @@ class VehicleInventory {
 
         // Setup photo carousels
         this.setupCarousels();
+        
+        // Setup clipboard copy functionality
+        this.setupClipboardCopy();
     }
 
     setupCarousels() {
@@ -267,6 +270,39 @@ class VehicleInventory {
         document.getElementById('sort-select').value = '';
         
         this.loadVehicles();
+    }
+
+    setupClipboardCopy() {
+        document.querySelectorAll('.clickable-value').forEach(element => {
+            element.addEventListener('click', async (e) => {
+                const textToCopy = e.target.getAttribute('data-copy');
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    
+                    // Show "COPIED" feedback
+                    const originalText = e.target.textContent;
+                    e.target.textContent = 'COPIED';
+                    e.target.style.color = '#00cc66';
+                    e.target.style.fontWeight = '600';
+                    
+                    // Reset after 1.5 seconds
+                    setTimeout(() => {
+                        e.target.textContent = originalText;
+                        e.target.style.color = '';
+                        e.target.style.fontWeight = '';
+                    }, 1500);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    // Fallback for older browsers
+                    e.target.textContent = 'COPY FAILED';
+                    e.target.style.color = '#ff6666';
+                    setTimeout(() => {
+                        e.target.textContent = originalText;
+                        e.target.style.color = '';
+                    }, 1500);
+                }
+            });
+        });
     }
 
     goToPage(page) {
