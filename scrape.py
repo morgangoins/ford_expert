@@ -1,3 +1,5 @@
+# scrape fordfairfield new inventory. this works!!
+
 import requests
 import json
 import math
@@ -41,7 +43,7 @@ fields = [
     'MSRP', 'Sale Price', 'Retail Price', 'Stock Number', 'Fuel Economy', 'Engine', 
     'Transmission', 'Drive Line', 'Body Style', 'Fuel Type', 'Condition', 'Inventory Date', 
     'Chrome ID', 'Model Code', 'Package Code', 'City Fuel Economy', 'Highway Fuel Economy', 
-    'Incentive IDs', 'Option Codes'
+    'Incentive IDs', 'Option Codes', 'Photo URLs'
 ]
 
 # Extract all available data
@@ -50,6 +52,8 @@ for v in unique_vehicles:
     attrs = {a['name']: a['value'] for a in v.get('attributes', [])}
     tracking_attrs = {a['name']: a['value'] for a in v.get('trackingAttributes', [])}  # Handle missing trackingAttributes
     pricing = v.get('pricing', {})
+    # Extract photo URLs
+    photo_urls = [img['uri'] for img in v.get('images', [])]
     row = {
         'VIN': v.get('vin', ''),
         'Year': v.get('year', ''),
@@ -77,7 +81,8 @@ for v in unique_vehicles:
         'City Fuel Economy': tracking_attrs.get('cityFuelEconomy', ''),
         'Highway Fuel Economy': tracking_attrs.get('highwayFuelEconomy', ''),
         'Incentive IDs': ','.join(v.get('incentiveIds', [])),
-        'Option Codes': ','.join(v.get('optionCodes', []))
+        'Option Codes': ','.join(v.get('optionCodes', [])),
+        'Photo URLs': ','.join(photo_urls)  # Join photo URLs with commas
     }
     rows.append(row)
 
