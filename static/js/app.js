@@ -67,7 +67,7 @@ class VehicleInventory {
         const grid = document.getElementById('vehicles-grid');
         
         if (vehicles.length === 0) {
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">No vehicles found matching your criteria.</p>';
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">NO VEHICLES FOUND</div>';
             return;
         }
 
@@ -76,9 +76,11 @@ class VehicleInventory {
                 <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
                     ${vehicle.photos.map((photo, index) => `
                         <img src="${photo}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}" 
-                             class="${index === 0 ? 'active' : ''}" data-index="${index}">
+                             class="${index === 0 ? 'active' : ''}" data-index="${index}" 
+                             onerror="this.src='https://via.placeholder.com/280x180/2a2a2a/666?text=NO+IMAGE'">
                     `).join('')}
                     
+                    ${vehicle.photos.length > 1 ? `
                     <div class="carousel-controls">
                         <button class="carousel-btn prev" onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('prevPhoto'))">‹</button>
                         <button class="carousel-btn next" onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('nextPhoto'))">›</button>
@@ -90,6 +92,7 @@ class VehicleInventory {
                                   onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('goToPhoto', {detail: ${index}}))"></span>
                         `).join('')}
                     </div>
+                    ` : ''}
                 </div>
                 
                 <div class="vehicle-info">
@@ -99,35 +102,35 @@ class VehicleInventory {
                     <div class="vehicle-details">
                         <div class="detail-row">
                             <span class="detail-label">VIN:</span>
-                            <span>${vehicle.vin}</span>
+                            <span class="detail-value">${vehicle.vin}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Stock:</span>
-                            <span>${vehicle.stock_number}</span>
+                            <span class="detail-label">STOCK:</span>
+                            <span class="detail-value">${vehicle.stock_number}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Exterior:</span>
-                            <span>${vehicle.exterior_color}</span>
+                            <span class="detail-label">EXTERIOR:</span>
+                            <span class="detail-value">${vehicle.exterior_color}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Interior:</span>
-                            <span>${vehicle.interior_color}</span>
+                            <span class="detail-label">INTERIOR:</span>
+                            <span class="detail-value">${vehicle.interior_color}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Engine:</span>
-                            <span>${vehicle.engine}</span>
+                            <span class="detail-label">ENGINE:</span>
+                            <span class="detail-value">${vehicle.engine}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">MPG:</span>
-                            <span>${vehicle.fuel_economy}</span>
+                            <span class="detail-value">${vehicle.fuel_economy}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Body Style:</span>
-                            <span>${vehicle.body_style}</span>
+                            <span class="detail-label">BODY:</span>
+                            <span class="detail-value">${vehicle.body_style}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Transmission:</span>
-                            <span>${vehicle.transmission}</span>
+                            <span class="detail-label">TRANS:</span>
+                            <span class="detail-value">${vehicle.transmission}</span>
                         </div>
                     </div>
                 </div>
@@ -213,7 +216,7 @@ class VehicleInventory {
 
     updateResultsCount(total) {
         const resultsCount = document.getElementById('results-count');
-        resultsCount.textContent = `${total} vehicles found`;
+        resultsCount.textContent = `${total} VEHICLES`;
     }
 
     setupEventListeners() {

@@ -67,11 +67,10 @@ def get_vehicles():
     # Convert to records
     vehicles = []
     for _, row in page_data.iterrows():
-        # Generate sample vehicle photos (placeholder URLs)
-        photos = [
-            f"https://via.placeholder.com/400x300/0066cc/ffffff?text={row['Year']}+{row['Model']}",
-            f"https://via.placeholder.com/400x300/cc6600/ffffff?text=Interior",
-            f"https://via.placeholder.com/400x300/009900/ffffff?text=Side+View"
+        # Use real photo URLs from scraped data
+        photo_urls_str = safe_value(row['Photo URLs'])
+        photos = [url.strip() for url in photo_urls_str.split(',') if url.strip()] if photo_urls_str else [
+            "https://via.placeholder.com/400x300/2a2a2a/ffffff?text=No+Image"
         ]
         
         # Helper function to handle NaN values
