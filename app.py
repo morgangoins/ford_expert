@@ -74,20 +74,26 @@ def get_vehicles():
             f"https://via.placeholder.com/400x300/009900/ffffff?text=Side+View"
         ]
         
+        # Helper function to handle NaN values
+        def safe_value(value):
+            if pd.isna(value):
+                return ''
+            return value
+        
         vehicle = {
-            'vin': row['VIN'],
+            'vin': safe_value(row['VIN']),
             'year': int(row['Year']),
-            'make': row['Make'],
-            'model': row['Model'],
-            'trim': row['Trim'],
-            'exterior_color': row['Exterior Color'],
-            'interior_color': row['Interior Color'],
-            'msrp': row['MSRP'],
-            'fuel_economy': row['Fuel Economy'],
-            'engine': row['Engine'],
-            'transmission': row['Transmission'],
-            'body_style': row['Body Style'],
-            'stock_number': row['Stock Number'],
+            'make': safe_value(row['Make']),
+            'model': safe_value(row['Model']),
+            'trim': safe_value(row['Trim']),
+            'exterior_color': safe_value(row['Exterior Color']),
+            'interior_color': safe_value(row['Interior Color']),
+            'msrp': safe_value(row['MSRP']),
+            'fuel_economy': safe_value(row['Fuel Economy']),
+            'engine': safe_value(row['Engine']),
+            'transmission': safe_value(row['Transmission']),
+            'body_style': safe_value(row['Body Style']),
+            'stock_number': safe_value(row['Stock Number']),
             'photos': photos
         }
         vehicles.append(vehicle)
