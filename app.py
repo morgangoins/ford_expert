@@ -7,11 +7,18 @@ app = Flask(__name__)
 CORS(app)
 
 # Load vehicle data
-df = pd.read_csv('inventory.csv')
+df_new = pd.read_csv('inventoryNew.csv')
+df_used = pd.read_csv('inventoryUsed.csv')
 
-# Clean and prepare data
-df['MSRP_numeric'] = df['MSRP'].str.replace('$', '').str.replace(',', '').astype(float)
-df['Year'] = df['Year'].astype(int)
+# Clean and prepare data for new inventory
+df_new['MSRP_numeric'] = df_new['MSRP'].str.replace('$', '').str.replace(',', '').astype(float)
+df_new['Year'] = df_new['Year'].astype(int)
+
+# Clean and prepare data for used inventory (use Retail Price as price)
+df_used['MSRP_numeric'] = df_used['Retail Price'].str.replace('$', '').str.replace(',', '').astype(float)
+df_used['Year'] = df_used['Year'].astype(int)
+# Add empty MSRP column for used vehicles to maintain consistency
+df_used['MSRP'] = df_used['Retail Price']  # Use retail price as display price
 
 @app.route('/')
 def index():
@@ -22,6 +29,7 @@ def get_vehicles():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 12, type=int)
     search = request.args.get('search', '')
+    inventory_type = request.args.get('inventory_type', 'new')  # default to new
     
     # Filters
     model_filter = request.args.get('model', '')
@@ -32,7 +40,10 @@ def get_vehicles():
     max_price = request.args.get('max_price', type=float)
     sort_by = request.args.get('sort', '')
     
-    # Start with all data
+    # Select appropriate dataframe based on inventory type
+    df = df_new if inventory_type == 'new' else df_used
+    
+    # Start with selected inventory data
     filtered_df = df.copy()
     
     # Apply multi-parameter search filter with robustness
@@ -119,6 +130,7 @@ def get_vehicles():
             "https://via.placeholder.com/280x180/2a2a2a/666?text=No+Image"
         ]
         
+        # Base vehicle data
         vehicle = {
             'vin': safe_value(row['VIN']),
             'year': int(row['Year']),
@@ -133,8 +145,13 @@ def get_vehicles():
             'transmission': safe_value(row['Transmission']),
             'body_style': safe_value(row['Body Style']),
             'stock_number': safe_value(row['Stock Number']),
-            'photos': photos
+            'photos': photos,
+            'inventory_type': inventory_type
         }
+        
+        # Add CarFax URL for used vehicles
+        if inventory_type == 'used' and 'Carfax URL' in row:
+            vehicle['carfax_url'] = safe_value(row['Carfax URL'])
         vehicles.append(vehicle)
     
     return jsonify({
@@ -148,6 +165,11 @@ def get_vehicles():
 @app.route('/api/filters')
 def get_filters():
     """Get available filter options"""
+    inventory_type = request.args.get('inventory_type', 'new')
+    
+    # Select appropriate dataframe
+    df = df_new if inventory_type == 'new' else df_used
+    
     filters = {
         'models': sorted(df['Model'].unique().tolist()),
         'years': sorted(df['Year'].unique().tolist(), reverse=True),

@@ -50,6 +50,40 @@ body {
     max-width: 400px;
 }
 
+.inventory-toggle {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.toggle-btn {
+    padding: 6px 16px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #999;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.toggle-btn:first-child {
+    border-right: none;
+}
+
+.toggle-btn.active {
+    background-color: #0066cc;
+    color: white;
+    border-color: #0066cc;
+}
+
+.toggle-btn:not(.active):hover {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
 .sort-container {
     display: flex;
     gap: 8px;
@@ -326,6 +360,31 @@ body {
 .clickable-value:hover {
     color: #0066cc;
     text-decoration: underline;
+}
+
+.carfax-container {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #333;
+}
+
+.carfax-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #ff6600;
+    color: white;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: none;
+    font-family: inherit;
+}
+
+.carfax-btn:hover {
+    background-color: #e55a00;
 }
 
 .pagination {

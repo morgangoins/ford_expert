@@ -3,6 +3,7 @@ class VehicleInventory {
         this.currentPage = 1;
         this.filters = {};
         this.searchTerm = '';
+        this.inventoryType = 'new'; // Default to new vehicles
         this.init();
     }
 
@@ -14,7 +15,7 @@ class VehicleInventory {
 
     async loadFilters() {
         try {
-            const response = await fetch('/api/filters');
+            const response = await fetch(`/api/filters?inventory_type=${this.inventoryType}`);
             const filters = await response.json();
             
             this.populateSelect('model-filter', filters.models);
@@ -44,6 +45,7 @@ class VehicleInventory {
             const params = new URLSearchParams({
                 page: this.currentPage,
                 per_page: 12,
+                inventory_type: this.inventoryType,
                 ...this.filters
             });
 
@@ -129,6 +131,12 @@ class VehicleInventory {
                             <span class="detail-value">${vehicle.transmission}</span>
                         </div>
                     </div>
+                    
+                    ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
+                    <div class="carfax-container">
+                        <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn">CARFAX</a>
+                    </div>
+                    ` : ''}
                 </div>
             </div>
         `).join('');
@@ -236,6 +244,10 @@ class VehicleInventory {
 
         // Clear filters
         document.getElementById('clear-filters').addEventListener('click', () => this.clearFilters());
+
+        // Inventory type toggle
+        document.getElementById('toggle-new').addEventListener('click', () => this.switchInventoryType('new'));
+        document.getElementById('toggle-used').addEventListener('click', () => this.switchInventoryType('used'));
     }
 
     performSearch() {
@@ -252,6 +264,39 @@ class VehicleInventory {
         }
         this.currentPage = 1;
         this.loadVehicles();
+    }
+
+    switchInventoryType(type) {
+        if (this.inventoryType === type) return;
+        
+        this.inventoryType = type;
+        this.currentPage = 1;
+        
+        // Update toggle button states
+        document.getElementById('toggle-new').classList.toggle('active', type === 'new');
+        document.getElementById('toggle-used').classList.toggle('active', type === 'used');
+        
+        // Clear all filters and search when switching
+        this.clearFilters();
+        
+        // Clear filter dropdown options before reloading
+        this.clearFilterOptions();
+        
+        // Reload filters and vehicles for new inventory type
+        this.loadFilters();
+        this.loadVehicles();
+    }
+
+    clearFilterOptions() {
+        // Clear all dropdown options except the first "All X" option
+        const selects = ['model-filter', 'year-filter', 'trim-filter', 'body-style-filter'];
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            // Keep only the first option (the "All X" option)
+            while (select.children.length > 1) {
+                select.removeChild(select.lastChild);
+            }
+        });
     }
 
     clearFilters() {
