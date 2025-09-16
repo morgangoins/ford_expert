@@ -87,9 +87,9 @@ for v in unique_vehicles:
     rows.append(row)
 
 # Save to CSV
-with open('inventory.csv', 'w', newline='') as f:
+with open('inventoryNew.csv', 'w', newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fields)
     writer.writeheader()
     writer.writerows(rows)
 
-print(f"Saved {len(rows)} unique vehicles to inventory.csv")
+print(f"Saved {len(rows)} unique vehicles to inventoryNew.csv")
