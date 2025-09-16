@@ -53,14 +53,33 @@ The scraper extracts the following vehicle information:
 - Stock Number, Model Code, Option Codes
 - And more detailed specifications
 
+## Web Application
+- `app.py` - Flask web application serving the vehicle inventory interface
+- `templates/index.html` - Main web interface with search and filtering
+- `static/css/style.css` - Responsive styling for the vehicle browsing interface  
+- `static/js/app.js` - Frontend JavaScript for search, filtering, and photo carousels
+
+### Web Features
+- **Search**: Search vehicles by model, trim, color, engine specifications
+- **Filtering**: Filter by model, year, trim, body style, and price range
+- **Vehicle Cards**: Detailed vehicle information with specifications
+- **Photo Carousel**: Browse multiple vehicle photos with next/prev controls
+- **Pagination**: Navigate through large inventory with page controls
+- **Responsive Design**: Works on desktop and mobile devices
+
 ## Recent Changes
 - 2025-09-16: Initial Replit environment setup
-- Installed required Python dependencies
-- Configured workflow for console-based execution
-- Verified scraping functionality with 387 vehicles
+- Installed required Python dependencies (pandas, pdfplumber, requests, flask, flask-cors)
+- Created Flask web application with search and filtering
+- Built responsive frontend with vehicle cards and photo carousels
+- Configured deployment for autoscale hosting
+- Fixed JSON serialization issues for proper API responses
 
 ## Project State
 - ✅ Scripts working and tested
-- ✅ Dependencies installed
-- ✅ Workflow configured
-- ✅ Ready for use in Replit environment
+- ✅ Dependencies installed  
+- ✅ Web application running on port 5000
+- ✅ Search and filtering functionality working
+- ✅ Photo carousel implemented on vehicle cards
+- ✅ Deployment configuration completed
+- ✅ Ready for production use
