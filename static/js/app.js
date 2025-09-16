@@ -121,10 +121,6 @@ class VehicleInventory {
                             <span class="detail-value">${vehicle.engine}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">MPG:</span>
-                            <span class="detail-value">${vehicle.fuel_economy}</span>
-                        </div>
-                        <div class="detail-row">
                             <span class="detail-label">BODY:</span>
                             <span class="detail-value">${vehicle.body_style}</span>
                         </div>

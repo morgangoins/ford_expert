@@ -35,27 +35,39 @@ def get_vehicles():
     # Start with all data
     filtered_df = df.copy()
     
-    # Apply search filter with robustness
+    # Apply multi-parameter search filter with robustness
     if search:
-        # Normalize search term for robustness (remove hyphens, spaces, make lowercase)
-        normalized_search = search.replace('-', '').replace(' ', '').lower()
-        
+        search_terms = search.strip().split()  # Split by whitespace to get individual terms
         search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine']
         
         try:
-            # Original search
-            original_mask = filtered_df[search_cols].astype(str).apply(
-                lambda x: x.str.contains(search, case=False, na=False, regex=False)
-            ).any(axis=1)
+            # For each search term, create a mask that checks if it matches in any column
+            term_masks = []
             
-            # Normalized search (remove hyphens and spaces)
-            normalized_mask = filtered_df[search_cols].astype(str).apply(
-                lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_search, case=False, na=False, regex=False)
-            ).any(axis=1)
+            for term in search_terms:
+                # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                normalized_term = term.replace('-', '').replace(' ', '').lower()
+                
+                # Original search for this term
+                original_mask = filtered_df[search_cols].astype(str).apply(
+                    lambda x: x.str.contains(term, case=False, na=False, regex=False)
+                ).any(axis=1)
+                
+                # Normalized search for this term (remove hyphens and spaces)
+                normalized_mask = filtered_df[search_cols].astype(str).apply(
+                    lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                ).any(axis=1)
+                
+                # Combine both approaches for this term
+                term_mask = original_mask | normalized_mask
+                term_masks.append(term_mask)
             
-            # Combine both search approaches
-            search_mask = original_mask | normalized_mask
-            filtered_df = filtered_df[search_mask]
+            # All terms must match (AND logic) - vehicle must contain ALL search terms
+            if term_masks:
+                combined_mask = term_masks[0]
+                for mask in term_masks[1:]:
+                    combined_mask = combined_mask & mask
+                filtered_df = filtered_df[combined_mask]
             
         except Exception as e:
             # Fallback to simple search if there's any error
