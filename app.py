@@ -34,7 +34,19 @@ def load_window_sticker_content(vin):
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read().strip()
                     if text:
-                        content.append(text)
+                        # Filter out misleading hybrid warranty text that appears on non-hybrid vehicles
+                        # Remove lines containing hybrid warranty mentions to avoid confusion
+                        lines = text.split('\n')
+                        filtered_lines = []
+                        for line in lines:
+                            line_lower = line.lower()
+                            # Skip lines that mention hybrid warranty but aren't actually about hybrid vehicles
+                            if not ('hybrid' in line_lower and ('warranty' in line_lower or '8' in line_lower and '100' in line_lower)):
+                                filtered_lines.append(line)
+                        
+                        filtered_text = '\n'.join(filtered_lines).strip()
+                        if filtered_text:
+                            content.append(filtered_text)
             except Exception as e:
                 print(f"Error reading {file_path}: {e}")
                 continue
