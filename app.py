@@ -111,19 +111,26 @@ def get_vehicles():
                     # Normalize term for robustness (remove hyphens, spaces, make lowercase)
                     normalized_term = term.replace('-', '').replace(' ', '').lower()
                     
-                    # Original search for this term
-                    original_mask = filtered_df[search_cols].astype(str).apply(
-                        lambda x: x.str.contains(term, case=False, na=False, regex=False)
-                    ).any(axis=1)
+                    # Create mask for this term by checking each search column
+                    term_masks = []
+                    for col in search_cols:
+                        if col in filtered_df.columns:
+                            # Original search for this term
+                            col_mask1 = filtered_df[col].astype(str).str.contains(term, case=False, na=False, regex=False)
+                            
+                            # Normalized search for this term (remove hyphens and spaces)
+                            col_mask2 = filtered_df[col].astype(str).str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                            
+                            # Combine both approaches for this column
+                            col_mask = col_mask1 | col_mask2
+                            term_masks.append(col_mask)
                     
-                    # Normalized search for this term (remove hyphens and spaces)
-                    normalized_mask = filtered_df[search_cols].astype(str).apply(
-                        lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
-                    ).any(axis=1)
-                    
-                    # Combine both approaches for this term
-                    term_mask = original_mask | normalized_mask
-                    include_masks.append(term_mask)
+                    # If term found in any column, include the row
+                    if term_masks:
+                        term_mask = term_masks[0]
+                        for mask in term_masks[1:]:
+                            term_mask = term_mask | mask
+                        include_masks.append(term_mask)
                 
                 # All include terms must match (AND logic)
                 if include_masks:
@@ -140,19 +147,26 @@ def get_vehicles():
                     # Normalize term for robustness (remove hyphens, spaces, make lowercase)
                     normalized_term = term.replace('-', '').replace(' ', '').lower()
                     
-                    # Original search for this term
-                    original_mask = filtered_df[search_cols].astype(str).apply(
-                        lambda x: x.str.contains(term, case=False, na=False, regex=False)
-                    ).any(axis=1)
+                    # Create mask for this term by checking each search column
+                    term_masks = []
+                    for col in search_cols:
+                        if col in filtered_df.columns:
+                            # Original search for this term
+                            col_mask1 = filtered_df[col].astype(str).str.contains(term, case=False, na=False, regex=False)
+                            
+                            # Normalized search for this term (remove hyphens and spaces)
+                            col_mask2 = filtered_df[col].astype(str).str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                            
+                            # Combine both approaches for this column
+                            col_mask = col_mask1 | col_mask2
+                            term_masks.append(col_mask)
                     
-                    # Normalized search for this term (remove hyphens and spaces)
-                    normalized_mask = filtered_df[search_cols].astype(str).apply(
-                        lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
-                    ).any(axis=1)
-                    
-                    # Combine both approaches for this term
-                    term_mask = original_mask | normalized_mask
-                    exclude_masks.append(term_mask)
+                    # If term found in any column, mark for exclusion
+                    if term_masks:
+                        term_mask = term_masks[0]
+                        for mask in term_masks[1:]:
+                            term_mask = term_mask | mask
+                        exclude_masks.append(term_mask)
                 
                 # Exclude vehicles that match any exclude term
                 if exclude_masks:
