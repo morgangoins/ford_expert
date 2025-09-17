@@ -107,6 +107,9 @@ class VehicleInventory {
                         ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
                         <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn-inline">CARFAX</a>
                         ` : ''}
+                        ${vehicle.inventory_type === 'new' ? `
+                        <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">WINDOW STICKER</a>
+                        ` : ''}
                     </div>
                     
                     <div class="vehicle-details">

@@ -53,39 +53,73 @@ def get_vehicles():
     # Start with selected inventory data
     filtered_df = df.copy()
     
-    # Apply multi-parameter search filter with robustness
+    # Apply multi-parameter search filter with robustness and exclusion support
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
         search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number']
         
+        # Separate include and exclude terms
+        include_terms = [term for term in search_terms if not term.startswith('-')]
+        exclude_terms = [term[1:] for term in search_terms if term.startswith('-') and len(term) > 1]
+        
         try:
-            # For each search term, create a mask that checks if it matches in any column
-            term_masks = []
+            # Process include terms (all must match)
+            if include_terms:
+                include_masks = []
+                
+                for term in include_terms:
+                    # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                    normalized_term = term.replace('-', '').replace(' ', '').lower()
+                    
+                    # Original search for this term
+                    original_mask = filtered_df[search_cols].astype(str).apply(
+                        lambda x: x.str.contains(term, case=False, na=False, regex=False)
+                    ).any(axis=1)
+                    
+                    # Normalized search for this term (remove hyphens and spaces)
+                    normalized_mask = filtered_df[search_cols].astype(str).apply(
+                        lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                    ).any(axis=1)
+                    
+                    # Combine both approaches for this term
+                    term_mask = original_mask | normalized_mask
+                    include_masks.append(term_mask)
+                
+                # All include terms must match (AND logic)
+                if include_masks:
+                    combined_include_mask = include_masks[0]
+                    for mask in include_masks[1:]:
+                        combined_include_mask = combined_include_mask & mask
+                    filtered_df = filtered_df[combined_include_mask]
             
-            for term in search_terms:
-                # Normalize term for robustness (remove hyphens, spaces, make lowercase)
-                normalized_term = term.replace('-', '').replace(' ', '').lower()
+            # Process exclude terms (none should match)
+            if exclude_terms:
+                exclude_masks = []
                 
-                # Original search for this term
-                original_mask = filtered_df[search_cols].astype(str).apply(
-                    lambda x: x.str.contains(term, case=False, na=False, regex=False)
-                ).any(axis=1)
+                for term in exclude_terms:
+                    # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                    normalized_term = term.replace('-', '').replace(' ', '').lower()
+                    
+                    # Original search for this term
+                    original_mask = filtered_df[search_cols].astype(str).apply(
+                        lambda x: x.str.contains(term, case=False, na=False, regex=False)
+                    ).any(axis=1)
+                    
+                    # Normalized search for this term (remove hyphens and spaces)
+                    normalized_mask = filtered_df[search_cols].astype(str).apply(
+                        lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                    ).any(axis=1)
+                    
+                    # Combine both approaches for this term
+                    term_mask = original_mask | normalized_mask
+                    exclude_masks.append(term_mask)
                 
-                # Normalized search for this term (remove hyphens and spaces)
-                normalized_mask = filtered_df[search_cols].astype(str).apply(
-                    lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
-                ).any(axis=1)
-                
-                # Combine both approaches for this term
-                term_mask = original_mask | normalized_mask
-                term_masks.append(term_mask)
-            
-            # All terms must match (AND logic) - vehicle must contain ALL search terms
-            if term_masks:
-                combined_mask = term_masks[0]
-                for mask in term_masks[1:]:
-                    combined_mask = combined_mask & mask
-                filtered_df = filtered_df[combined_mask]
+                # Exclude vehicles that match any exclude term
+                if exclude_masks:
+                    combined_exclude_mask = exclude_masks[0]
+                    for mask in exclude_masks[1:]:
+                        combined_exclude_mask = combined_exclude_mask | mask
+                    filtered_df = filtered_df[~combined_exclude_mask]
             
         except Exception as e:
             # Fallback to simple search if there's any error
