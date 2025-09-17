@@ -1,5 +1,3 @@
-# scrape fordfairfield new inventory. this works!!
-
 import requests
 import json
 import math
@@ -43,7 +41,7 @@ fields = [
     'MSRP', 'Sale Price', 'Retail Price', 'Stock Number', 'Fuel Economy', 'Engine', 
     'Transmission', 'Drive Line', 'Body Style', 'Fuel Type', 'Condition', 'Inventory Date', 
     'Chrome ID', 'Model Code', 'Package Code', 'City Fuel Economy', 'Highway Fuel Economy', 
-    'Incentive IDs', 'Option Codes', 'Photo URLs'
+    'Incentive IDs', 'Option Codes', 'Photo URLs', 'Vehicle Link'
 ]
 
 # Extract all available data
@@ -54,6 +52,8 @@ for v in unique_vehicles:
     pricing = v.get('pricing', {})
     # Extract photo URLs
     photo_urls = [img['uri'] for img in v.get('images', [])]
+    # Construct full vehicle link
+    vehicle_link = f"https://www.fordfairfield.com{v.get('link', '')}"
     row = {
         'VIN': v.get('vin', ''),
         'Year': v.get('year', ''),
@@ -82,7 +82,8 @@ for v in unique_vehicles:
         'Highway Fuel Economy': tracking_attrs.get('highwayFuelEconomy', ''),
         'Incentive IDs': ','.join(v.get('incentiveIds', [])),
         'Option Codes': ','.join(v.get('optionCodes', [])),
-        'Photo URLs': ','.join(photo_urls)  # Join photo URLs with commas
+        'Photo URLs': ','.join(photo_urls),
+        'Vehicle Link': vehicle_link
     }
     rows.append(row)
 
@@ -92,4 +93,4 @@ with open('inventoryNew.csv', 'w', newline='') as f:
     writer.writeheader()
     writer.writerows(rows)
 
-print(f"Saved {len(rows)} unique vehicles to inventoryNew.csv")
+print(f"Saved {len(rows)} unique vehicles inventoryNew.csv")

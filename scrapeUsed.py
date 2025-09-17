@@ -38,10 +38,10 @@ unique_vehicles = {v['vin']: v for v in vehicles}.values()
 # Define all fields to extract
 fields = [
     'VIN', 'Year', 'Make', 'Model', 'Trim', 'Exterior Color', 'Interior Color', 'Odometer', 
-    'Retail Price', 'Stock Number', 'Fuel Economy', 'Engine', 
+    'MSRP', 'Sale Price', 'Retail Price', 'Stock Number', 'Fuel Economy', 'Engine', 
     'Transmission', 'Drive Line', 'Body Style', 'Fuel Type', 'Condition', 'Inventory Date', 
     'Chrome ID', 'Model Code', 'Package Code', 'City Fuel Economy', 'Highway Fuel Economy', 
-    'Incentive IDs', 'Option Codes', 'Photo URLs', 'Packages', 'Carfax URL'
+    'Incentive IDs', 'Option Codes', 'Photo URLs', 'Packages', 'Carfax URL', 'Full Link'
 ]
 
 # Extract all available data
@@ -56,6 +56,9 @@ for v in unique_vehicles:
     packages = v.get('packages', [])
     # Extract Carfax URL
     carfax_url = next((c['href'] for c in v.get('callout', []) if 'carfax' in c.get('badgeClasses', [])), '')
+    # Extract and format full link
+    link = v.get('link', '')
+    full_link = f"https://www.fordfairfield.com{link}" if link else ''
     
     row = {
         'VIN': v.get('vin', ''),
@@ -66,7 +69,9 @@ for v in unique_vehicles:
         'Exterior Color': attrs.get('exteriorColor', ''),
         'Interior Color': attrs.get('interiorColor', ''),
         'Odometer': v.get('odometer', '0'),
-        'Retail Price': pricing.get('retailPrice', ''),
+        'MSRP': pricing.get('retailPrice', ''),
+        'Sale Price': next((p['value'] for p in pricing.get('dprice', []) if p.get('typeClass') == 'salePrice'), ''),
+        'Retail Price': next((p['value'] for p in pricing.get('dprice', []) if p.get('typeClass') == 'internetPrice'), ''),
         'Stock Number': attrs.get('stockNumber', ''),
         'Fuel Economy': attrs.get('fuelEconomy', ''),
         'Engine': attrs.get('engine', ''),
@@ -85,7 +90,8 @@ for v in unique_vehicles:
         'Option Codes': ','.join(v.get('optionCodes', [])),
         'Photo URLs': ','.join(photo_urls),  # Join photo URLs with commas
         'Packages': ','.join(packages),  # Join packages with commas
-        'Carfax URL': carfax_url  # Carfax vehicle history URL
+        'Carfax URL': carfax_url,  # Carfax vehicle history URL
+        'Full Link': full_link  # Complete link URL
     }
     rows.append(row)
 
