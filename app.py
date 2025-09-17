@@ -8,6 +8,39 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
+def load_window_sticker_content(vin):
+    """Load all window sticker text files for a given VIN"""
+    sticker_dir = os.path.join('stickers', vin)
+    
+    if not os.path.exists(sticker_dir):
+        return ""
+    
+    # Text files to load (excluding the main PDF text which is redundant)
+    text_files = [
+        'optionalEquipment.txt',
+        'standardEquipment.txt', 
+        'priceInfo.txt',
+        'bottomLeft.txt',
+        'mpg.txt',
+        'topBlueLeft.txt',
+        'topBlueRight.txt'
+    ]
+    
+    content = []
+    for filename in text_files:
+        file_path = os.path.join(sticker_dir, filename)
+        if os.path.exists(file_path):
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    text = f.read().strip()
+                    if text:
+                        content.append(text)
+            except Exception as e:
+                print(f"Error reading {file_path}: {e}")
+                continue
+    
+    return " ".join(content)
+
 # Load vehicle data
 df_new = pd.read_csv('inventoryNew.csv')
 df_used = pd.read_csv('inventoryUsed.csv')
@@ -57,6 +90,13 @@ def get_vehicles():
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
         search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number']
+        
+        # Load window sticker content for new vehicles and add to search
+        if inventory_type == 'new':
+            # Add window sticker content column for search
+            if 'window_sticker_content' not in filtered_df.columns:
+                filtered_df['window_sticker_content'] = filtered_df['VIN'].apply(load_window_sticker_content)
+            search_cols.append('window_sticker_content')
         
         # Separate include and exclude terms
         include_terms = [term for term in search_terms if not term.startswith('-')]
