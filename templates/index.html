@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ford Vehicle Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>FORD INVENTORY</h1>
+                <div class="search-container">
+                    <input type="text" id="search" placeholder="Search vehicles..." class="search-input">
+                    <button id="search-btn" class="search-btn">SEARCH</button>
+                </div>
+                <div class="sort-container">
+                    <select id="sort-select" class="sort-select">
+                        <option value="">SORT BY</option>
+                        <option value="price_low">PRICE: LOW TO HIGH</option>
+                        <option value="price_high">PRICE: HIGH TO LOW</option>
+                    </select>
+                </div>
+                <div class="results-info">
+                    <span id="results-count">Loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Sidebar Filters -->
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <h3>FILTERS</h3>
+                    
+                    <div class="filter-group">
+                        <label>MODEL</label>
+                        <select id="model-filter">
+                            <option value="">All Models</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>YEAR</label>
+                        <select id="year-filter">
+                            <option value="">All Years</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>TRIM</label>
+                        <select id="trim-filter">
+                            <option value="">All Trims</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>BODY STYLE</label>
+                        <select id="body-style-filter">
+                            <option value="">All Body Styles</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>PRICE RANGE</label>
+                        <input type="number" id="min-price" placeholder="Min">
+                        <input type="number" id="max-price" placeholder="Max">
+                    </div>
+                    
+                    <button id="clear-filters" class="clear-btn">CLEAR ALL</button>
+                </div>
+            </aside>
+
+            <!-- Vehicle Grid -->
+            <main class="content-area">
+                <div class="vehicles-grid" id="vehicles-grid">
+                    <!-- Vehicle cards will be populated here -->
+                </div>
+                
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be populated here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
