@@ -8,52 +8,6 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-def load_window_sticker_content(vin):
-    """Load all window sticker text files for a given VIN"""
-    sticker_dir = os.path.join('stickers', vin)
-    
-    if not os.path.exists(sticker_dir):
-        return ""
-    
-    # Text files to load - include all available window sticker text content
-    text_files = [
-        'optionalEquipment.txt',
-        'standardEquipment.txt', 
-        'priceInfo.txt',
-        'bottomLeft.txt',
-        'mpg.txt',
-        'topBlueLeft.txt',
-        'topBlueRight.txt',
-        'vin.txt',
-        f'{vin}.txt'  # Main comprehensive text file
-    ]
-    
-    content = []
-    for filename in text_files:
-        file_path = os.path.join(sticker_dir, filename)
-        if os.path.exists(file_path):
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    text = f.read().strip()
-                    if text:
-                        # Filter out misleading hybrid warranty text that appears on non-hybrid vehicles
-                        # Remove lines containing hybrid warranty mentions to avoid confusion
-                        lines = text.split('\n')
-                        filtered_lines = []
-                        for line in lines:
-                            line_lower = line.lower()
-                            # Skip lines that mention hybrid warranty but aren't actually about hybrid vehicles
-                            if not ('hybrid' in line_lower and ('warranty' in line_lower or '8' in line_lower and '100' in line_lower)):
-                                filtered_lines.append(line)
-                        
-                        filtered_text = '\n'.join(filtered_lines).strip()
-                        if filtered_text:
-                            content.append(filtered_text)
-            except Exception as e:
-                print(f"Error reading {file_path}: {e}")
-                continue
-    
-    return " ".join(content)
 
 # Load vehicle data
 df_new = pd.read_csv('inventoryNew.csv')
@@ -103,14 +57,7 @@ def get_vehicles():
     # Apply multi-parameter search filter with robustness and exclusion support
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
-        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number']
-        
-        # Load window sticker content for new vehicles and add to search
-        if inventory_type == 'new':
-            # Add window sticker content column for search
-            if 'window_sticker_content' not in filtered_df.columns:
-                filtered_df['window_sticker_content'] = filtered_df['VIN'].apply(load_window_sticker_content)
-            search_cols.append('window_sticker_content')
+        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number', 'Body Style', 'Fuel Economy']
         
         # Separate include and exclude terms
         include_terms = [term for term in search_terms if not term.startswith('-')]
@@ -122,38 +69,22 @@ def get_vehicles():
                 include_masks = []
                 
                 for term in include_terms:
-                    # Strengthen normalization - remove all whitespace and punctuation
-                    normalized_term = term.lower()
-                    normalized_term = pd.Series([normalized_term]).str.replace(r'\s+', '', regex=True).str.replace(r'[^0-9a-z]', '', regex=True).iloc[0]
-                    
-                    # Add synonym expansion for FX4
-                    search_variants = [term, normalized_term]
-                    if normalized_term == 'fx4':
-                        search_variants.extend(['off-road package', 'offroad package', 'off road package', 'offroad', 'off-road'])
+                    # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                    normalized_term = term.replace('-', '').replace(' ', '').lower()
                     
                     # Create mask for this term by checking each search column
                     term_masks = []
                     for col in search_cols:
                         if col in filtered_df.columns:
-                            col_mask_variants = []
+                            # Original search for this term
+                            col_mask1 = filtered_df[col].astype(str).str.contains(term, case=False, na=False, regex=False)
                             
-                            for variant in search_variants:
-                                # Original search for this variant
-                                col_mask1 = filtered_df[col].astype(str).str.contains(variant, case=False, na=False, regex=False)
-                                
-                                # Fully normalized search (remove all whitespace and punctuation)
-                                variant_normalized = pd.Series([variant.lower()]).str.replace(r'\s+', '', regex=True).str.replace(r'[^0-9a-z]', '', regex=True).iloc[0]
-                                col_mask2 = filtered_df[col].astype(str).str.lower().str.replace(r'\s+', '', regex=True).str.replace(r'[^0-9a-z]', '', regex=True).str.contains(variant_normalized, case=False, na=False, regex=False)
-                                
-                                # Combine both approaches for this variant
-                                col_mask_variants.append(col_mask1 | col_mask2)
+                            # Normalized search for this term (remove hyphens and spaces)
+                            col_mask2 = filtered_df[col].astype(str).str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
                             
-                            # Combine all variants for this column (OR logic)
-                            if col_mask_variants:
-                                col_mask = col_mask_variants[0]
-                                for mask in col_mask_variants[1:]:
-                                    col_mask = col_mask | mask
-                                term_masks.append(col_mask)
+                            # Combine both approaches for this column
+                            col_mask = col_mask1 | col_mask2
+                            term_masks.append(col_mask)
                     
                     # If term found in any column, include the row
                     if term_masks:
@@ -167,45 +98,29 @@ def get_vehicles():
                     combined_include_mask = include_masks[0]
                     for mask in include_masks[1:]:
                         combined_include_mask = combined_include_mask & mask
-                    filtered_df = filtered_df[combined_include_mask]
+                    filtered_df = filtered_df.loc[combined_include_mask].copy()
             
             # Process exclude terms (none should match)
             if exclude_terms:
                 exclude_masks = []
                 
                 for term in exclude_terms:
-                    # Strengthen normalization - remove all whitespace and punctuation
-                    normalized_term = term.lower()
-                    normalized_term = pd.Series([normalized_term]).str.replace(r'\s+', '', regex=True).str.replace(r'[^0-9a-z]', '', regex=True).iloc[0]
-                    
-                    # Add synonym expansion for FX4
-                    search_variants = [term, normalized_term]
-                    if normalized_term == 'fx4':
-                        search_variants.extend(['off-road package', 'offroad package', 'off road package', 'offroad', 'off-road'])
+                    # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                    normalized_term = term.replace('-', '').replace(' ', '').lower()
                     
                     # Create mask for this term by checking each search column
                     term_masks = []
                     for col in search_cols:
                         if col in filtered_df.columns:
-                            col_mask_variants = []
+                            # Original search for this term
+                            col_mask1 = filtered_df[col].astype(str).str.contains(term, case=False, na=False, regex=False)
                             
-                            for variant in search_variants:
-                                # Original search for this variant
-                                col_mask1 = filtered_df[col].astype(str).str.contains(variant, case=False, na=False, regex=False)
-                                
-                                # Fully normalized search (remove all whitespace and punctuation)
-                                variant_normalized = pd.Series([variant.lower()]).str.replace(r'\s+', '', regex=True).str.replace(r'[^0-9a-z]', '', regex=True).iloc[0]
-                                col_mask2 = filtered_df[col].astype(str).str.lower().str.replace(r'\s+', '', regex=True).str.replace(r'[^0-9a-z]', '', regex=True).str.contains(variant_normalized, case=False, na=False, regex=False)
-                                
-                                # Combine both approaches for this variant
-                                col_mask_variants.append(col_mask1 | col_mask2)
+                            # Normalized search for this term (remove hyphens and spaces)
+                            col_mask2 = filtered_df[col].astype(str).str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
                             
-                            # Combine all variants for this column (OR logic)
-                            if col_mask_variants:
-                                col_mask = col_mask_variants[0]
-                                for mask in col_mask_variants[1:]:
-                                    col_mask = col_mask | mask
-                                term_masks.append(col_mask)
+                            # Combine both approaches for this column
+                            col_mask = col_mask1 | col_mask2
+                            term_masks.append(col_mask)
                     
                     # If term found in any column, mark for exclusion
                     if term_masks:
@@ -219,7 +134,7 @@ def get_vehicles():
                     combined_exclude_mask = exclude_masks[0]
                     for mask in exclude_masks[1:]:
                         combined_exclude_mask = combined_exclude_mask | mask
-                    filtered_df = filtered_df[~combined_exclude_mask]
+                    filtered_df = filtered_df.loc[~combined_exclude_mask].copy()
             
         except Exception as e:
             # Fallback to simple search if there's any error
