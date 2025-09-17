@@ -17,7 +17,7 @@ df_new['MSRP_numeric'] = df_new['MSRP'].str.replace('$', '').str.replace(',', ''
 df_new['Year'] = df_new['Year'].astype(int)
 
 # Clean and prepare data for used inventory (use Retail Price as price)
-df_used['MSRP_numeric'] = df_used['Retail Price'].str.replace('$', '').str.replace(',', '').astype(float)
+df_used['MSRP_numeric'] = df_used['Retail Price'].astype(str).str.replace('$', '').str.replace(',', '').astype(float)
 df_used['Year'] = df_used['Year'].astype(int)
 # Add empty MSRP column for used vehicles to maintain consistency
 df_used['MSRP'] = df_used['Retail Price']  # Use retail price as display price
@@ -159,6 +159,12 @@ def get_vehicles():
         # Add CarFax URL for used vehicles
         if inventory_type == 'used' and 'Carfax URL' in row:
             vehicle['carfax_url'] = safe_value(row['Carfax URL'])
+            
+        # Add vehicle link URL
+        link_column = 'Vehicle Link' if inventory_type == 'new' else 'Full Link'
+        if link_column in row:
+            vehicle['vehicle_link'] = safe_value(row[link_column])
+            
         vehicles.append(vehicle)
     
     return jsonify({

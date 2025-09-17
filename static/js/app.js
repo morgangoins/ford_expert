@@ -99,7 +99,9 @@ class VehicleInventory {
                 </div>
                 
                 <div class="vehicle-info">
-                    <div class="vehicle-title">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</div>
+                    <div class="vehicle-title">
+                    ${vehicle.vehicle_link ? `<a href="${vehicle.vehicle_link}" target="_blank" rel="noopener noreferrer">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</a>` : `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
+                </div>
                     <div class="price-row">
                         <div class="vehicle-price">${vehicle.msrp}</div>
                         ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
