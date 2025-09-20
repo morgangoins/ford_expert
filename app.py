@@ -17,11 +17,10 @@ df_used = pd.read_csv('inventoryUsed.csv')
 df_new['MSRP_numeric'] = df_new['MSRP'].str.replace('$', '').str.replace(',', '').astype(float)
 df_new['Year'] = df_new['Year'].astype(int)
 
-# Clean and prepare data for used inventory (use Retail Price as price)
-df_used['MSRP_numeric'] = df_used['Retail Price'].astype(str).str.replace('$', '').str.replace(',', '').astype(float)
+# Clean and prepare data for used inventory (use MSRP as price since Retail Price is often empty)
+df_used['MSRP_numeric'] = df_used['MSRP'].astype(str).str.replace('$', '').str.replace(',', '').astype(float)
 df_used['Year'] = df_used['Year'].astype(int)
-# Add empty MSRP column for used vehicles to maintain consistency
-df_used['MSRP'] = df_used['Retail Price']  # Use retail price as display price
+# MSRP column already contains the price for used vehicles
 
 @app.route('/')
 def index():
@@ -57,7 +56,7 @@ def get_vehicles():
     # Apply multi-parameter search filter with robustness and exclusion support
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
-        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number', 'Body Style', 'Fuel Economy']
+        search_cols = ['Make', 'Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number', 'Body Style', 'Fuel Economy']
         
         # Separate include and exclude terms
         include_terms = [term for term in search_terms if not term.startswith('-')]
