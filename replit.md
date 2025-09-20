@@ -80,6 +80,10 @@ The scraper extracts the following vehicle information:
 - Extended search to include VIN and Stock Number fields
 - Added clipboard copy functionality for VIN/Stock with fallback for HTTP environments
 - Removed MPG field from vehicle cards for cleaner layout
+- 2025-09-20: **Critical Used Car Fixes**
+  - Fixed brand search: Added 'Make' to search columns enabling searches for Honda, Toyota, BMW, Chevrolet, etc.
+  - Fixed price display: Changed used car price source from empty 'Retail Price' to populated 'MSRP' column
+  - Verified multi-brand inventory contains 24 different brands with proper pricing display
 
 ## Project State
 - ✅ Scripts working and tested
