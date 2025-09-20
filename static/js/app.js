@@ -108,7 +108,8 @@ class VehicleInventory {
                         <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn-inline">CARFAX</a>
                         ` : ''}
                         ${vehicle.inventory_type === 'new' ? `
-                        <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">WINDOW STICKER</a>
+                        <a href="https://fordvisions.dealerconnection.com/vinv/GetInvoice.aspx?v=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="invoice-btn">INVOICE</a>
+                        <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">STICKER</a>
                         ` : ''}
                     </div>
                     

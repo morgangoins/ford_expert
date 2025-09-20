@@ -412,7 +412,7 @@ body {
     border-color: #777;
 }
 
-.window-sticker-btn {
+.window-sticker-btn, .invoice-btn {
     display: inline-block;
     padding: 3px 6px;
     background-color: #444;
@@ -426,9 +426,10 @@ body {
     border: 1px solid #666;
     font-family: inherit;
     flex-shrink: 0;
+    margin-left: 4px;
 }
 
-.window-sticker-btn:hover {
+.window-sticker-btn:hover, .invoice-btn:hover {
     background-color: #555;
     color: #fff;
     border-color: #777;
