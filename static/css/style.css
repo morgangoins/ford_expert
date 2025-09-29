@@ -473,6 +473,101 @@ body {
     background: #1a1a1a;
 }
 
+/* View Toggle */
+.view-toggle {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+/* Table View */
+.vehicles-table-container {
+    overflow-x: auto;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+}
+
+.vehicles-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 1400px;
+}
+
+.vehicles-table thead {
+    background: #2a2a2a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.vehicles-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: 2px solid #444;
+    border-right: 1px solid #333;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+}
+
+.vehicles-table th:last-child {
+    border-right: none;
+}
+
+.vehicles-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+.vehicles-table th.sortable:hover {
+    background-color: #333;
+    color: #0066cc;
+}
+
+.vehicles-table tbody tr {
+    border-bottom: 1px solid #2a2a2a;
+    transition: background-color 0.2s;
+}
+
+.vehicles-table tbody tr:hover {
+    background-color: #222;
+}
+
+.vehicles-table td {
+    padding: 8px 12px;
+    color: #ccc;
+    border-right: 1px solid #2a2a2a;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.vehicles-table td:last-child {
+    border-right: none;
+}
+
+.vehicles-table .price-cell {
+    color: #00cc66;
+    font-weight: 600;
+}
+
+.vehicles-table .clickable-cell {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.vehicles-table .clickable-cell:hover {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .filters-sidebar {

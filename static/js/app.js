@@ -4,6 +4,11 @@ class VehicleInventory {
         this.filters = {};
         this.searchTerm = '';
         this.inventoryType = 'new'; // Default to new vehicles
+        this.viewMode = 'card'; // Default to card view
+        this.sortColumn = null;
+        this.sortDirection = 'asc';
+        this.currentVehicles = [];
+        this.tableClipboardSetup = false;
         this.init();
     }
 
@@ -45,7 +50,7 @@ class VehicleInventory {
         try {
             const params = new URLSearchParams({
                 page: this.currentPage,
-                per_page: 12,
+                per_page: this.viewMode === 'list' ? 100 : 12,
                 inventory_type: this.inventoryType,
                 ...this.filters
             });
@@ -57,12 +62,24 @@ class VehicleInventory {
             const response = await fetch(`/api/vehicles?${params}`);
             const data = await response.json();
             
-            this.renderVehicles(data.vehicles);
+            this.currentVehicles = data.vehicles;
+            
+            if (this.viewMode === 'card') {
+                this.renderVehicles(data.vehicles);
+            } else {
+                this.renderTable(data.vehicles);
+            }
+            
             this.renderPagination(data);
             this.updateResultsCount(data.total);
         } catch (error) {
             console.error('Error loading vehicles:', error);
-            document.getElementById('vehicles-grid').innerHTML = '<p>Error loading vehicles. Please try again.</p>';
+            const errorMsg = '<p>Error loading vehicles. Please try again.</p>';
+            if (this.viewMode === 'card') {
+                document.getElementById('vehicles-grid').innerHTML = errorMsg;
+            } else {
+                document.getElementById('table-body').innerHTML = `<tr><td colspan="100" style="text-align: center; padding: 40px;">${errorMsg}</td></tr>`;
+            }
         }
     }
 
@@ -277,6 +294,10 @@ class VehicleInventory {
         // Inventory type toggle
         document.getElementById('toggle-new').addEventListener('click', () => this.switchInventoryType('new'));
         document.getElementById('toggle-used').addEventListener('click', () => this.switchInventoryType('used'));
+        
+        // View mode toggle
+        document.getElementById('toggle-card').addEventListener('click', () => this.switchViewMode('card'));
+        document.getElementById('toggle-list').addEventListener('click', () => this.switchViewMode('list'));
     }
 
     performSearch() {
@@ -410,6 +431,173 @@ class VehicleInventory {
         this.currentPage = page;
         this.loadVehicles();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    switchViewMode(mode) {
+        if (this.viewMode === mode) return;
+        
+        this.viewMode = mode;
+        this.currentPage = 1;
+        
+        // Update toggle button states
+        document.getElementById('toggle-card').classList.toggle('active', mode === 'card');
+        document.getElementById('toggle-list').classList.toggle('active', mode === 'list');
+        
+        // Show/hide appropriate container
+        document.getElementById('vehicles-grid').style.display = mode === 'card' ? 'grid' : 'none';
+        document.getElementById('vehicles-table-container').style.display = mode === 'list' ? 'block' : 'none';
+        
+        // Reload vehicles
+        this.loadVehicles();
+    }
+
+    renderTable(vehicles) {
+        const tableContainer = document.getElementById('vehicles-table-container');
+        const tableHeader = document.getElementById('table-header');
+        const tableBody = document.getElementById('table-body');
+        
+        if (vehicles.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="100" style="text-align: center; padding: 40px; color: #666;">NO VEHICLES FOUND</td></tr>';
+            return;
+        }
+
+        // Define columns to display
+        const columns = [
+            { key: 'year', label: 'YEAR', sortable: true },
+            { key: 'make', label: 'MAKE', sortable: true },
+            { key: 'model', label: 'MODEL', sortable: true },
+            { key: 'trim', label: 'TRIM', sortable: true },
+            { key: 'msrp', label: 'PRICE', sortable: true },
+            { key: 'vin', label: 'VIN', sortable: true },
+            { key: 'stock_number', label: 'STOCK', sortable: true },
+            { key: 'exterior_color', label: 'EXTERIOR', sortable: true },
+            { key: 'interior_color', label: 'INTERIOR', sortable: true },
+            { key: 'engine', label: 'ENGINE', sortable: true },
+            { key: 'transmission', label: 'TRANSMISSION', sortable: true },
+            { key: 'body_style', label: 'BODY', sortable: true },
+            { key: 'fuel_economy', label: 'MPG', sortable: true }
+        ];
+
+        // Render header
+        tableHeader.innerHTML = columns.map(col => {
+            if (col.sortable) {
+                const isSorted = this.sortColumn === col.key;
+                const direction = isSorted ? this.sortDirection : '';
+                const arrow = direction === 'asc' ? ' ▲' : direction === 'desc' ? ' ▼' : '';
+                return `<th class="sortable" onclick="app.sortTable('${col.key}')">${col.label}${arrow}</th>`;
+            }
+            return `<th>${col.label}</th>`;
+        }).join('');
+
+        // Render rows
+        tableBody.innerHTML = vehicles.map(vehicle => {
+            return `<tr>
+                <td>${vehicle.year || ''}</td>
+                <td>${vehicle.make || ''}</td>
+                <td>${vehicle.model || ''}</td>
+                <td>${vehicle.trim || ''}</td>
+                <td class="price-cell">${vehicle.msrp || ''}</td>
+                <td class="clickable-cell" data-copy="${vehicle.vin || ''}" title="Click to copy">${vehicle.vin || ''}</td>
+                <td class="clickable-cell" data-copy="${vehicle.stock_number || ''}" title="Click to copy">${vehicle.stock_number || ''}</td>
+                <td>${vehicle.exterior_color || ''}</td>
+                <td>${vehicle.interior_color || ''}</td>
+                <td>${vehicle.engine || ''}</td>
+                <td>${vehicle.transmission || ''}</td>
+                <td>${vehicle.body_style || ''}</td>
+                <td>${vehicle.fuel_economy || ''}</td>
+            </tr>`;
+        }).join('');
+
+        // Setup clipboard copy for table cells (only once)
+        if (!this.tableClipboardSetup) {
+            this.setupTableClipboard();
+            this.tableClipboardSetup = true;
+        }
+    }
+
+    sortTable(column) {
+        // Toggle sort direction if clicking same column
+        if (this.sortColumn === column) {
+            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.sortColumn = column;
+            this.sortDirection = 'asc';
+        }
+
+        // Sort the current vehicles array
+        this.currentVehicles.sort((a, b) => {
+            let aVal = a[column] || '';
+            let bVal = b[column] || '';
+
+            // Handle price sorting (remove $ and commas)
+            if (column === 'msrp') {
+                aVal = parseFloat(aVal.toString().replace(/[$,]/g, '')) || 0;
+                bVal = parseFloat(bVal.toString().replace(/[$,]/g, '')) || 0;
+            }
+            // Handle year sorting
+            else if (column === 'year') {
+                aVal = parseInt(aVal) || 0;
+                bVal = parseInt(bVal) || 0;
+            }
+            // String comparison
+            else {
+                aVal = aVal.toString().toLowerCase();
+                bVal = bVal.toString().toLowerCase();
+            }
+
+            if (aVal < bVal) return this.sortDirection === 'asc' ? -1 : 1;
+            if (aVal > bVal) return this.sortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        // Re-render the table
+        this.renderTable(this.currentVehicles);
+    }
+
+    setupTableClipboard() {
+        const tableBody = document.getElementById('table-body');
+        
+        tableBody.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('clickable-cell')) {
+                const textToCopy = e.target.getAttribute('data-copy');
+                const originalText = e.target.textContent;
+                
+                if (!textToCopy) return;
+                
+                try {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(textToCopy);
+                    } else {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = textToCopy;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        textArea.style.top = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                    }
+                    
+                    e.target.textContent = 'COPIED';
+                    e.target.style.color = '#00cc66';
+                    
+                    setTimeout(() => {
+                        e.target.textContent = originalText;
+                        e.target.style.color = '';
+                    }, 1500);
+                    
+                } catch (err) {
+                    e.target.textContent = 'COPY FAILED';
+                    e.target.style.color = '#ff6666';
+                    setTimeout(() => {
+                        e.target.textContent = originalText;
+                        e.target.style.color = '';
+                    }, 1500);
+                }
+            }
+        });
     }
 }
 

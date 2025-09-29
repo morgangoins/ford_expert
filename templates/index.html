@@ -20,6 +20,10 @@
                     <button id="toggle-new" class="toggle-btn active">NEW</button>
                     <button id="toggle-used" class="toggle-btn">USED</button>
                 </div>
+                <div class="view-toggle">
+                    <button id="toggle-card" class="toggle-btn active">CARD</button>
+                    <button id="toggle-list" class="toggle-btn">LIST</button>
+                </div>
                 <div class="sort-container">
                     <select id="sort-select" class="sort-select">
                         <option value="">SORT BY</option>
@@ -83,6 +87,19 @@
             <main class="content-area">
                 <div class="vehicles-grid" id="vehicles-grid">
                     <!-- Vehicle cards will be populated here -->
+                </div>
+                
+                <div class="vehicles-table-container" id="vehicles-table-container" style="display: none;">
+                    <table class="vehicles-table" id="vehicles-table">
+                        <thead>
+                            <tr id="table-header">
+                                <!-- Table headers will be populated here -->
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Table rows will be populated here -->
+                        </tbody>
+                    </table>
                 </div>
                 
                 <div class="pagination" id="pagination">
