@@ -2,6 +2,8 @@ import requests
 import json
 import math
 import csv
+import sys
+from requests.exceptions import RequestException
 
 base_url = "https://www.fordfairfield.com/apis/widget/INVENTORY_LISTING_DEFAULT_AUTO_USED:inventory-data-bus1/getInventory"
 
@@ -17,20 +19,51 @@ params = {
     "lang": "en"
 }
 
-# Fetch first page
-r = requests.get(base_url, params=params)
-data = r.json()
-vehicles = data['inventory']
-total = data['pageInfo']['totalCount']
-page_size = int(params['pageSize'])
-start = page_size
-
-# Fetch remaining pages
-while start < total:
-    params['start'] = str(start)
-    r = requests.get(base_url, params=params)
-    vehicles += r.json()['inventory']
-    start += page_size
+# Fetch first page with error handling
+try:
+    r = requests.get(base_url, params=params, timeout=30)
+    r.raise_for_status()  # Raise an error for bad status codes
+    data = r.json()
+    
+    # Check if response has expected structure
+    if 'inventory' not in data or 'pageInfo' not in data:
+        print("Error: API response missing expected fields")
+        print(f"Response: {data}")
+        sys.exit(0)  # Exit gracefully to avoid crash loop
+    
+    vehicles = data['inventory']
+    total = data['pageInfo']['totalCount']
+    page_size = int(params['pageSize'])
+    start = page_size
+    
+    # Fetch remaining pages
+    while start < total:
+        params['start'] = str(start)
+        try:
+            r = requests.get(base_url, params=params, timeout=30)
+            r.raise_for_status()
+            page_data = r.json()
+            if 'inventory' in page_data:
+                vehicles += page_data['inventory']
+            start += page_size
+        except (RequestException, json.JSONDecodeError) as e:
+            print(f"Warning: Failed to fetch page at start={start}: {e}")
+            start += page_size  # Continue to next page
+            continue
+            
+except RequestException as e:
+    print(f"Error: Failed to connect to API: {e}")
+    sys.exit(0)  # Exit gracefully
+except json.JSONDecodeError as e:
+    print(f"Error: Failed to parse JSON response: {e}")
+    try:
+        print(f"Response text: {r.text[:500]}")
+    except:
+        pass
+    sys.exit(0)  # Exit gracefully
+except Exception as e:
+    print(f"Error: Unexpected error occurred: {e}")
+    sys.exit(0)  # Exit gracefully
 
 # Deduplicate by VIN
 unique_vehicles = {v['vin']: v for v in vehicles}.values()

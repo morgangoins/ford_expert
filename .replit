@@ -47,5 +47,5 @@ localPort = 45197
 externalPort = 3000
 
 [deployment]
-deploymentTarget = "scheduled"
-run = ["python", "update_inventory.py"]
+deploymentTarget = "autoscale"
+run = ["gunicorn", "--bind=0.0.0.0:5000", "--reuse-port", "app:app"]
