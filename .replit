@@ -39,6 +39,10 @@ localPort = 33063
 externalPort = 3002
 
 [[ports]]
+localPort = 36661
+externalPort = 3003
+
+[[ports]]
 localPort = 43557
 externalPort = 3001
 
@@ -47,5 +51,5 @@ localPort = 45197
 externalPort = 3000
 
 [deployment]
-deploymentTarget = "autoscale"
-run = ["python", "app.py"]
+deploymentTarget = "scheduled"
+run = ["python", "update_inventory.py"]
