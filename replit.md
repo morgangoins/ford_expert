@@ -60,12 +60,18 @@ The scraper extracts the following vehicle information:
 - `static/js/app.js` - Frontend JavaScript for search, filtering, and photo carousels
 
 ### Web Features
+- **Inventory Types**: Toggle between NEW and USED vehicles
+- **View Modes**: 
+  - **CARD** - Visual grid view with photos and details
+  - **LIST** - Table view with website-scraped data
+  - **LIST2** - Table view with window sticker PDF-extracted data for comparison
 - **Search**: Search vehicles by model, trim, color, engine specifications
 - **Filtering**: Filter by model, year, trim, body style, and price range
 - **Vehicle Cards**: Detailed vehicle information with specifications
 - **Photo Carousel**: Browse multiple vehicle photos with next/prev controls
 - **Pagination**: Navigate through large inventory with page controls
 - **Responsive Design**: Works on desktop and mobile devices
+- **Data Comparison**: Compare scraped website data (LIST) with PDF sticker data (LIST2) for accuracy verification
 
 ## Recent Changes
 - 2025-09-16: Initial Replit environment setup
@@ -84,6 +90,13 @@ The scraper extracts the following vehicle information:
   - Fixed brand search: Added 'Make' to search columns enabling searches for Honda, Toyota, BMW, Chevrolet, etc.
   - Fixed price display: Changed used car price source from empty 'Retail Price' to populated 'MSRP' column
   - Verified multi-brand inventory contains 24 different brands with proper pricing display
+- 2025-09-30: **LIST2 View Mode Implementation**
+  - Restructured LIST2 as a view mode (CARD/LIST/LIST2) instead of inventory type
+  - LIST2 now displays window sticker PDF-extracted data in table format
+  - Added filter visibility toggling - hides model/year/trim/body filters in LIST2 mode
+  - Users can compare website data (LIST) vs sticker data (LIST2) for same inventory (NEW/USED)
+  - Created inventoryList2New.csv and inventoryList2Used.csv with test data
+  - Full getSticker.py processing available for production-quality PDF extraction
 
 ## Project State
 - ✅ Scripts working and tested
