@@ -1,0 +1,4 @@
+EXTERIOR                      
+    AVALANCHE                   
+  INTERIOR                      
+    MEDIUM DARK SLATE CLOTH

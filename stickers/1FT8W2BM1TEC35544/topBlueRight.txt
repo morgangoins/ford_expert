@@ -1,0 +1,4 @@
+EXTERIOR                      
+    STAR WHITE                  
+  INTERIOR                      
+    JAVA LEATHER
