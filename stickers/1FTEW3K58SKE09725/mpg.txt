@@ -1,0 +1,9 @@
+Fuel Economy                              
+                MPG      Standard Pickup Trucks range from 12 to
+                         87 MPG. The best vehicle rates 140
+                         MPGe.                
+                 16    24                     
+                                              
+    combined city/hwy city highway            
+    5.3                                       
+         gallons per 100 miles

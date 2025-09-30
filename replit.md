@@ -96,16 +96,18 @@ The scraper extracts the following vehicle information:
   - Added filter visibility toggling - hides model/year/trim/body filters in LIST2 mode
   - Users can compare website data (LIST) vs sticker data (LIST2) for same inventory (NEW/USED)
   - Fixed getSticker.py to properly extract and parse PDF data:
-    - Title split into: Year, Model, Driveline, Body (e.g., "2025 F-150 4X2 REGULAR CAB")
+    - Title split into: Year, Make (Ford), Model, Trim, Driveline, Body
+    - Make column: Always "Ford" for all vehicles
+    - Trim extraction: Extracted from interior color line (STX, Lariat, etc.) or fallback to scraped CSV trim
+    - Super Duty handling: Adds "SRW" or "DRW" designation to F-250/F-350 models when detected
     - Wheelbase cleaned: removed "WHEELBASE" text, shows just measurement (e.g., '141"')
     - Interior Color cleaned for F-150s: extracted seating config to separate column
     - Seating column: shows "40/20/40" or "40/console/40" for F-150s only
-    - topBlueLeft: Year, Model, Driveline, Body, Wheelbase, Engine, Transmission
-    - topBlueRight: Exterior Color, Interior Color (cleaned), Seating
+    - topBlueLeft: Year, Model (+ SRW/DRW for Super Duty), Driveline, Body, Wheelbase, Engine, Transmission
+    - topBlueRight: Exterior Color, Interior Color (cleaned, with trim extracted), Seating
     - optionalEquipment: Equipment Group codes (101A, 302A, 303A, etc.)
-  - Generated inventoryList2New.csv and inventoryList2Used.csv with first 5 vehicles
-  - 4/5 vehicles extract perfectly, 1 has minor PDF encoding issues
-  - LIST2 columns: YEAR, MODEL, DRIVELINE, BODY, PRICE, VIN, STOCK, WHEELBASE, EXTERIOR, INTERIOR, SEATING, ENGINE, TRANSMISSION, EQUIPMENT
+  - Processing all vehicles (386+ new, 60+ used) - takes 20-30 minutes
+  - LIST2 columns: YEAR, MAKE, MODEL, TRIM, DRIVELINE, BODY, PRICE, VIN, STOCK, WHEELBASE, EXTERIOR, INTERIOR, SEATING, ENGINE, TRANSMISSION, EQUIPMENT
   - Data mapping verified and working correctly in both frontend and backend
 
 ## Project State

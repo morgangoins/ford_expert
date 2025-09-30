@@ -498,7 +498,9 @@ class VehicleInventory {
         // Define columns based on view mode
         const columns = this.viewMode === 'list2' ? [
             { key: 'year', label: 'YEAR', sortable: true },
+            { key: 'make', label: 'MAKE', sortable: true },
             { key: 'model', label: 'MODEL', sortable: true },
+            { key: 'trim', label: 'TRIM', sortable: true },
             { key: 'driveline', label: 'DRIVELINE', sortable: true },
             { key: 'body', label: 'BODY', sortable: true },
             { key: 'msrp', label: 'PRICE', sortable: true },

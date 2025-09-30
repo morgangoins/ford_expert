@@ -51,10 +51,11 @@ def process_inventory(csv_path, output_csv):
     # Load CSV
     df = pd.read_csv(csv_path)
     
-    # Extract VINs (limit to first 5 for testing)
-    vins = df['VIN'].tolist()[:5]
-    stock_numbers = df['Stock Number'].tolist()[:5]
-    prices = df['MSRP'].tolist()[:5]
+    # Extract VINs (process all vehicles)
+    vins = df['VIN'].tolist()
+    stock_numbers = df['Stock Number'].tolist()
+    prices = df['MSRP'].tolist()
+    trims_from_scrape = df['Trim'].tolist()
     
     # Create stickers folder
     os.makedirs('stickers', exist_ok=True)
@@ -84,6 +85,9 @@ def process_inventory(csv_path, output_csv):
             row['Stock Number'] = stock_numbers[i] if i < len(stock_numbers) else ''
             row['Price'] = prices[i] if i < len(prices) else ''
             
+            # Always add Make as "Ford"
+            row['Make'] = 'Ford'
+            
             # Extract data from window sticker - topBlueLeft section
             if 'topBlueLeft' in extracted_data:
                 lines = [l.strip() for l in extracted_data['topBlueLeft'] if l.strip()]
@@ -93,9 +97,21 @@ def process_inventory(csv_path, output_csv):
                     title_parts = lines[0].split()
                     if len(title_parts) >= 4:
                         row['Year'] = title_parts[0]
-                        row['Model'] = title_parts[1]
+                        base_model = title_parts[1]
                         row['Driveline'] = title_parts[2]
                         row['Body'] = ' '.join(title_parts[3:])
+                        
+                        # For Super Duty trucks (F-250, F-350, etc.), extract SRW/DRW from 2nd line
+                        srw_drw = ''
+                        if 'F-250' in base_model.upper() or 'F-350' in base_model.upper() or 'F-450' in base_model.upper():
+                            if len(lines) >= 2:
+                                second_line = lines[1].upper()
+                                if 'SRW' in second_line:
+                                    srw_drw = ' SRW'
+                                elif 'DRW' in second_line:
+                                    srw_drw = ' DRW'
+                        
+                        row['Model'] = base_model + srw_drw
                     
                 # Parse wheelbase and remove "WHEELBASE" text
                 if len(lines) >= 2:
@@ -117,6 +133,24 @@ def process_inventory(csv_path, output_csv):
                 if len(lines) >= 4:
                     interior_text = lines[3]
                     
+                    # Extract trim from interior line (e.g., "BLACK STX CLOTH 40/CON/40")
+                    # Common trim levels: XL, XLT, Lariat, King Ranch, Platinum, Limited, STX, etc.
+                    import re
+                    trim_keywords = ['XL', 'XLT', 'LARIAT', 'KING RANCH', 'PLATINUM', 'LIMITED', 'STX', 'TREMOR', 'RAPTOR']
+                    extracted_trim = ''
+                    for trim in trim_keywords:
+                        if trim in interior_text.upper():
+                            extracted_trim = trim.title() if trim != 'XL' and trim != 'XLT' and trim != 'STX' else trim
+                            # Remove trim from interior text
+                            interior_text = re.sub(r'\b' + trim + r'\b', '', interior_text, flags=re.IGNORECASE).strip()
+                            break
+                    
+                    # Use extracted trim from PDF if found, otherwise fall back to scraped trim
+                    if extracted_trim:
+                        row['Trim'] = extracted_trim
+                    elif i < len(trims_from_scrape):
+                        row['Trim'] = trims_from_scrape[i]
+                    
                     # For F-150s, extract seating configuration
                     seating_config = ''
                     if 'F-150' in row.get('Model', '').upper():
@@ -124,11 +158,10 @@ def process_inventory(csv_path, output_csv):
                         if '40/20/40' in interior_text:
                             seating_config = '40/20/40'
                             interior_text = interior_text.replace('40/20/40', '').strip()
-                        elif '40/CONSOLE/40' in interior_text.upper():
+                        elif '40/CONSOLE/40' in interior_text.upper() or '40/CON/40' in interior_text.upper():
                             seating_config = '40/console/40'
                             # Case-insensitive replacement
-                            import re
-                            interior_text = re.sub(r'40/CONSOLE/40', '', interior_text, flags=re.IGNORECASE).strip()
+                            interior_text = re.sub(r'40/(CONSOLE|CON)/40', '', interior_text, flags=re.IGNORECASE).strip()
                     
                     row['Interior Color'] = interior_text
                     row['Seating'] = seating_config
@@ -154,11 +187,13 @@ def process_inventory(csv_path, output_csv):
             csv_data.append({
                 'VIN': vin,
                 'Stock Number': stock_numbers[i] if i < len(stock_numbers) else '',
-                'Price': prices[i] if i < len(prices) else ''
+                'Price': prices[i] if i < len(prices) else '',
+                'Make': 'Ford',
+                'Trim': trims_from_scrape[i] if i < len(trims_from_scrape) else ''
             })
     
     # Create DataFrame and save to CSV
-    columns = ['VIN', 'Stock Number', 'Price', 'Year', 'Model', 'Driveline', 'Body', 'Wheelbase', 'Engine', 'Transmission', 'Exterior Color', 'Interior Color', 'Seating', 'Equipment Group']
+    columns = ['VIN', 'Stock Number', 'Price', 'Year', 'Make', 'Model', 'Trim', 'Driveline', 'Body', 'Wheelbase', 'Engine', 'Transmission', 'Exterior Color', 'Interior Color', 'Seating', 'Equipment Group']
     output_df = pd.DataFrame(csv_data)
     # Reorder columns, keeping any that exist
     existing_cols = [c for c in columns if c in output_df.columns]

@@ -1,0 +1,4 @@
+EXTERIOR                      
+    SPACE WHITE METALLIC        
+  INTERIOR                      
+    BLACK STX CLOTH 40/CON/40

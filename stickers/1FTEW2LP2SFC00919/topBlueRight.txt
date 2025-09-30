@@ -1,0 +1,4 @@
+EXTERIOR                      
+    MARSH GRAY                  
+  INTERIOR                      
+    BLACK/BRONZE 40/CON/40

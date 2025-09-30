@@ -1,0 +1,4 @@
+EXTERIOR                      
+    BLUE METALLIC               
+  INTERIOR                      
+    SANDSTONE ACTIVEX SEAT MTRL
