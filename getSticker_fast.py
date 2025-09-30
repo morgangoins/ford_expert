@@ -7,7 +7,7 @@ def read_extracted_text_files(vin_folder):
     """Read existing text files instead of re-extracting from PDF"""
     extracted_data = {}
     
-    text_files = ['topBlueLeft', 'topBlueRight', 'optionalEquipment']
+    text_files = ['title', 'topBlueLeft', 'topBlueRight', 'optionalEquipment']
     for text_file in text_files:
         file_path = os.path.join(vin_folder, f"{text_file}.txt")
         if os.path.exists(file_path):
@@ -49,30 +49,39 @@ def process_inventory(csv_path, output_csv):
                 # Always add Make as "Ford"
                 row['Make'] = 'Ford'
                 
-                # Extract data from window sticker - topBlueLeft section
+                # Extract year and model from title region
+                if 'title' in extracted_data:
+                    title_text = ' '.join([l.strip() for l in extracted_data['title'] if l.strip()])
+                    title_parts = title_text.split()
+                    if len(title_parts) >= 2:
+                        row['Year'] = title_parts[0]
+                        row['Model'] = title_parts[1]
+                        # Store driveline and body for later if available
+                        if len(title_parts) >= 3:
+                            row['Driveline'] = title_parts[2]
+                        if len(title_parts) >= 4:
+                            row['Body'] = ' '.join(title_parts[3:])
+                
+                # Extract additional data from window sticker - topBlueLeft section
                 if 'topBlueLeft' in extracted_data:
                     lines = [l.strip() for l in extracted_data['topBlueLeft'] if l.strip()]
                     
-                    # Parse title into year, model, driveline, body
-                    if len(lines) >= 1:
+                    # If title didn't provide driveline/body, try to get from topBlueLeft
+                    if 'Driveline' not in row and len(lines) >= 1:
                         title_parts = lines[0].split()
-                        if len(title_parts) >= 4:
-                            row['Year'] = title_parts[0]
-                            base_model = title_parts[1]
+                        if len(title_parts) >= 3:
                             row['Driveline'] = title_parts[2]
+                        if len(title_parts) >= 4:
                             row['Body'] = ' '.join(title_parts[3:])
-                            
-                            # For Super Duty trucks, extract SRW/DRW from 2nd line
-                            srw_drw = ''
-                            if 'F-250' in base_model.upper() or 'F-350' in base_model.upper() or 'F-450' in base_model.upper():
-                                if len(lines) >= 2:
-                                    second_line = lines[1].upper()
-                                    if 'SRW' in second_line:
-                                        srw_drw = ' SRW'
-                                    elif 'DRW' in second_line:
-                                        srw_drw = ' DRW'
-                            
-                            row['Model'] = base_model + srw_drw
+                    
+                    # For Super Duty trucks (F-250, F-350, etc.), extract SRW/DRW from 2nd line
+                    if row.get('Model', '') and ('F-250' in row['Model'].upper() or 'F-350' in row['Model'].upper() or 'F-450' in row['Model'].upper()):
+                        if len(lines) >= 2:
+                            second_line = lines[1].upper()
+                            if 'SRW' in second_line:
+                                row['Model'] = row['Model'] + ' SRW'
+                            elif 'DRW' in second_line:
+                                row['Model'] = row['Model'] + ' DRW'
                         
                     # Parse wheelbase and remove "WHEELBASE" text
                     if len(lines) >= 2:
