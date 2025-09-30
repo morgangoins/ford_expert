@@ -1,0 +1,4 @@
+EXTERIOR                      
+    MARSH GRAY                  
+  INTERIOR                      
+    BLACK ACTIVE X

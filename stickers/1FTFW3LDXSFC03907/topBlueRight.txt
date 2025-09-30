@@ -1,0 +1,4 @@
+EXTERIOR                      
+    SPACE WHITE METALLIC        
+  INTERIOR                      
+    BLACK ACTIVE X SEATS
