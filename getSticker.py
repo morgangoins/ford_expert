@@ -87,10 +87,22 @@ def process_inventory(csv_path, output_csv):
             # Extract data from window sticker - topBlueLeft section
             if 'topBlueLeft' in extracted_data:
                 lines = [l.strip() for l in extracted_data['topBlueLeft'] if l.strip()]
+                
+                # Parse title into year, model, driveline, body
                 if len(lines) >= 1:
-                    row['Title'] = lines[0]
+                    title_parts = lines[0].split()
+                    if len(title_parts) >= 4:
+                        row['Year'] = title_parts[0]
+                        row['Model'] = title_parts[1]
+                        row['Driveline'] = title_parts[2]
+                        row['Body'] = ' '.join(title_parts[3:])
+                    
+                # Parse wheelbase and remove "WHEELBASE" text
                 if len(lines) >= 2:
-                    row['Wheelbase'] = lines[1]
+                    wheelbase_text = lines[1]
+                    # Remove "WHEELBASE" text, keeping just the measurement
+                    row['Wheelbase'] = wheelbase_text.replace('WHEELBASE', '').strip()
+                    
                 if len(lines) >= 3:
                     row['Engine'] = lines[2]
                 if len(lines) >= 4:
@@ -103,7 +115,23 @@ def process_inventory(csv_path, output_csv):
                 if len(lines) >= 2:
                     row['Exterior Color'] = lines[1]
                 if len(lines) >= 4:
-                    row['Interior Color'] = lines[3]
+                    interior_text = lines[3]
+                    
+                    # For F-150s, extract seating configuration
+                    seating_config = ''
+                    if 'F-150' in row.get('Model', '').upper():
+                        # Check for 40/20/40 or 40/console/40 patterns
+                        if '40/20/40' in interior_text:
+                            seating_config = '40/20/40'
+                            interior_text = interior_text.replace('40/20/40', '').strip()
+                        elif '40/CONSOLE/40' in interior_text.upper():
+                            seating_config = '40/console/40'
+                            # Case-insensitive replacement
+                            import re
+                            interior_text = re.sub(r'40/CONSOLE/40', '', interior_text, flags=re.IGNORECASE).strip()
+                    
+                    row['Interior Color'] = interior_text
+                    row['Seating'] = seating_config
             
             # Extract equipment group from optionalEquipment section
             if 'optionalEquipment' in extracted_data:
@@ -130,7 +158,7 @@ def process_inventory(csv_path, output_csv):
             })
     
     # Create DataFrame and save to CSV
-    columns = ['VIN', 'Stock Number', 'Price', 'Title', 'Wheelbase', 'Engine', 'Transmission', 'Exterior Color', 'Interior Color', 'Equipment Group']
+    columns = ['VIN', 'Stock Number', 'Price', 'Year', 'Model', 'Driveline', 'Body', 'Wheelbase', 'Engine', 'Transmission', 'Exterior Color', 'Interior Color', 'Seating', 'Equipment Group']
     output_df = pd.DataFrame(csv_data)
     # Reorder columns, keeping any that exist
     existing_cols = [c for c in columns if c in output_df.columns]

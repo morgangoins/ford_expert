@@ -497,13 +497,17 @@ class VehicleInventory {
 
         // Define columns based on view mode
         const columns = this.viewMode === 'list2' ? [
-            { key: 'title', label: 'TITLE', sortable: true },
+            { key: 'year', label: 'YEAR', sortable: true },
+            { key: 'model', label: 'MODEL', sortable: true },
+            { key: 'driveline', label: 'DRIVELINE', sortable: true },
+            { key: 'body', label: 'BODY', sortable: true },
             { key: 'msrp', label: 'PRICE', sortable: true },
             { key: 'vin', label: 'VIN', sortable: true },
             { key: 'stock_number', label: 'STOCK', sortable: true },
             { key: 'wheelbase', label: 'WHEELBASE', sortable: true },
             { key: 'exterior_color', label: 'EXTERIOR', sortable: true },
             { key: 'interior_color', label: 'INTERIOR', sortable: true },
+            { key: 'seating', label: 'SEATING', sortable: true },
             { key: 'engine', label: 'ENGINE', sortable: true },
             { key: 'transmission', label: 'TRANSMISSION', sortable: true },
             { key: 'equipment_group', label: 'EQUIPMENT', sortable: true }

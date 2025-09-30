@@ -95,13 +95,17 @@ The scraper extracts the following vehicle information:
   - LIST2 now displays window sticker PDF-extracted data in table format
   - Added filter visibility toggling - hides model/year/trim/body filters in LIST2 mode
   - Users can compare website data (LIST) vs sticker data (LIST2) for same inventory (NEW/USED)
-  - Fixed getSticker.py to properly extract data from PDF regions:
-    - topBlueLeft: Title, Wheelbase, Engine, Transmission
-    - topBlueRight: Exterior Color, Interior Color
+  - Fixed getSticker.py to properly extract and parse PDF data:
+    - Title split into: Year, Model, Driveline, Body (e.g., "2025 F-150 4X2 REGULAR CAB")
+    - Wheelbase cleaned: removed "WHEELBASE" text, shows just measurement (e.g., '141"')
+    - Interior Color cleaned for F-150s: extracted seating config to separate column
+    - Seating column: shows "40/20/40" or "40/console/40" for F-150s only
+    - topBlueLeft: Year, Model, Driveline, Body, Wheelbase, Engine, Transmission
+    - topBlueRight: Exterior Color, Interior Color (cleaned), Seating
     - optionalEquipment: Equipment Group codes (101A, 302A, 303A, etc.)
   - Generated inventoryList2New.csv and inventoryList2Used.csv with first 5 vehicles
   - 4/5 vehicles extract perfectly, 1 has minor PDF encoding issues
-  - LIST2 columns: TITLE, PRICE, VIN, STOCK, WHEELBASE, EXTERIOR, INTERIOR, ENGINE, TRANSMISSION, EQUIPMENT
+  - LIST2 columns: YEAR, MODEL, DRIVELINE, BODY, PRICE, VIN, STOCK, WHEELBASE, EXTERIOR, INTERIOR, SEATING, ENGINE, TRANSMISSION, EQUIPMENT
   - Data mapping verified and working correctly in both frontend and backend
 
 ## Project State
