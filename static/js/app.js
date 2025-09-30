@@ -93,69 +93,7 @@ class VehicleInventory {
         }
 
         grid.innerHTML = vehicles.map(vehicle => {
-            // Different rendering for List2 vs regular inventory
-            if (vehicle.inventory_type === 'list2') {
-                return `
-                    <div class="vehicle-card">
-                        <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
-                            ${vehicle.photos.map((photo, index) => `
-                                <img ${index === 0 ? `src="${photo}"` : `data-src="${photo}"`} alt="${vehicle.title || 'Vehicle'}" 
-                                     class="${index === 0 ? 'active' : ''}" data-index="${index}" 
-                                     onerror="this.src='https://via.placeholder.com/280x180/2a2a2a/666?text=NO+IMAGE'">
-                            `).join('')}
-                        </div>
-                        
-                        <div class="vehicle-info">
-                            <div class="vehicle-title">${vehicle.title || 'N/A'}</div>
-                            <div class="price-row">
-                                <div class="vehicle-price">${vehicle.msrp}</div>
-                                <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">STICKER</a>
-                            </div>
-                            
-                            <div class="vehicle-details">
-                                <div class="detail-row">
-                                    <span class="detail-label">VIN:</span>
-                                    <span class="detail-value clickable-value" data-copy="${vehicle.vin}" title="Click to copy">${vehicle.vin}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">STOCK:</span>
-                                    <span class="detail-value clickable-value" data-copy="${vehicle.stock_number}" title="Click to copy">${vehicle.stock_number}</span>
-                                </div>
-                                ${vehicle.wheelbase ? `
-                                <div class="detail-row">
-                                    <span class="detail-label">WHEELBASE:</span>
-                                    <span class="detail-value">${vehicle.wheelbase}</span>
-                                </div>
-                                ` : ''}
-                                <div class="detail-row">
-                                    <span class="detail-label">EXTERIOR:</span>
-                                    <span class="detail-value">${vehicle.exterior_color}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">INTERIOR:</span>
-                                    <span class="detail-value">${vehicle.interior_color}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">ENGINE:</span>
-                                    <span class="detail-value">${vehicle.engine}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">TRANS:</span>
-                                    <span class="detail-value">${vehicle.transmission}</span>
-                                </div>
-                                ${vehicle.equipment_group ? `
-                                <div class="detail-row">
-                                    <span class="detail-label">EQUIPMENT:</span>
-                                    <span class="detail-value">${vehicle.equipment_group}</span>
-                                </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                // Regular inventory rendering
-                return `
+            return `
                     <div class="vehicle-card">
                         <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
                             ${vehicle.photos.map((photo, index) => `
@@ -227,7 +165,6 @@ class VehicleInventory {
                         </div>
                     </div>
                 `;
-            }
         }).join('');
 
         // Setup photo carousels
@@ -515,8 +452,37 @@ class VehicleInventory {
         document.getElementById('vehicles-grid').style.display = mode === 'card' ? 'grid' : 'none';
         document.getElementById('vehicles-table-container').style.display = (mode === 'list' || mode === 'list2') ? 'block' : 'none';
         
-        // Reload vehicles
+        // Update filter visibility for LIST2
+        this.updateFilterVisibility();
+        
+        // Reload filters and vehicles
+        this.loadFilters();
         this.loadVehicles();
+    }
+    
+    updateFilterVisibility() {
+        // Hide model/year/trim/body filters in LIST2 mode since they're not applicable
+        const filterGroups = [
+            { selector: '#model-filter', label: 'MODEL' },
+            { selector: '#year-filter', label: 'YEAR' },
+            { selector: '#trim-filter', label: 'TRIM' },
+            { selector: '#body-style-filter', label: 'BODY STYLE' }
+        ];
+        
+        filterGroups.forEach(({ selector }) => {
+            const element = document.querySelector(selector);
+            if (element && element.parentElement) {
+                const filterGroup = element.parentElement;
+                if (this.viewMode === 'list2') {
+                    filterGroup.style.display = 'none';
+                    // Clear the filter value
+                    const filterKey = selector.replace('#', '').replace('-filter', '').replace('-', '_');
+                    delete this.filters[filterKey];
+                } else {
+                    filterGroup.style.display = 'block';
+                }
+            }
+        });
     }
 
     renderTable(vehicles) {

@@ -67,7 +67,7 @@ def get_vehicles():
     if view_mode == 'list2':
         df = df_list2_new if inventory_type == 'new' else df_list2_used
         if df.empty:
-            return jsonify({'vehicles': [], 'total': 0, 'pages': 0, 'current_page': page})
+            return jsonify({'vehicles': [], 'total': 0, 'total_pages': 0, 'page': page})
     else:
         df = df_new if inventory_type == 'new' else df_used
     
