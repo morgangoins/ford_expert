@@ -1,0 +1,11 @@
+Fuel Economy                              
+                    MPGe     Small Station Wagons range from 2
+                             118 MPGe. The best vehicle rates
+                             MPGe.            
+                     105   93    34           
+                                              
+    combined city/hwy city highway kW-hrs per 
+                                 100 miles    
+    Driving Range                             
+     When fully fueled, vehicle can travel about...
+    0    40   80   120  160  200

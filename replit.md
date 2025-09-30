@@ -90,13 +90,19 @@ The scraper extracts the following vehicle information:
   - Fixed brand search: Added 'Make' to search columns enabling searches for Honda, Toyota, BMW, Chevrolet, etc.
   - Fixed price display: Changed used car price source from empty 'Retail Price' to populated 'MSRP' column
   - Verified multi-brand inventory contains 24 different brands with proper pricing display
-- 2025-09-30: **LIST2 View Mode Implementation**
+- 2025-09-30: **LIST2 View Mode Implementation - COMPLETED**
   - Restructured LIST2 as a view mode (CARD/LIST/LIST2) instead of inventory type
   - LIST2 now displays window sticker PDF-extracted data in table format
   - Added filter visibility toggling - hides model/year/trim/body filters in LIST2 mode
   - Users can compare website data (LIST) vs sticker data (LIST2) for same inventory (NEW/USED)
-  - Created inventoryList2New.csv and inventoryList2Used.csv with test data
-  - Full getSticker.py processing available for production-quality PDF extraction
+  - Fixed getSticker.py to properly extract data from PDF regions:
+    - topBlueLeft: Title, Wheelbase, Engine, Transmission
+    - topBlueRight: Exterior Color, Interior Color
+    - optionalEquipment: Equipment Group codes (101A, 302A, 303A, etc.)
+  - Generated inventoryList2New.csv and inventoryList2Used.csv with first 5 vehicles
+  - 4/5 vehicles extract perfectly, 1 has minor PDF encoding issues
+  - LIST2 columns: TITLE, PRICE, VIN, STOCK, WHEELBASE, EXTERIOR, INTERIOR, ENGINE, TRANSMISSION, EQUIPMENT
+  - Data mapping verified and working correctly in both frontend and backend
 
 ## Project State
 - ✅ Scripts working and tested

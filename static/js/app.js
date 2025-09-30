@@ -536,21 +536,21 @@ class VehicleInventory {
 
         // Render rows
         tableBody.innerHTML = vehicles.map(vehicle => {
-            return `<tr>
-                <td>${vehicle.year || ''}</td>
-                <td>${vehicle.make || ''}</td>
-                <td>${vehicle.model || ''}</td>
-                <td>${vehicle.trim || ''}</td>
-                <td class="price-cell">${vehicle.msrp || ''}</td>
-                <td class="clickable-cell" data-copy="${vehicle.vin || ''}" title="Click to copy">${vehicle.vin || ''}</td>
-                <td class="clickable-cell" data-copy="${vehicle.stock_number || ''}" title="Click to copy">${vehicle.stock_number || ''}</td>
-                <td>${vehicle.exterior_color || ''}</td>
-                <td>${vehicle.interior_color || ''}</td>
-                <td>${vehicle.engine || ''}</td>
-                <td>${vehicle.transmission || ''}</td>
-                <td>${vehicle.body_style || ''}</td>
-                <td>${vehicle.fuel_economy || ''}</td>
-            </tr>`;
+            const cells = columns.map(col => {
+                const value = vehicle[col.key] || '';
+                const isClickable = (col.key === 'vin' || col.key === 'stock_number');
+                const isPriceCell = col.key === 'msrp';
+                
+                if (isClickable) {
+                    return `<td class="clickable-cell" data-copy="${value}" title="Click to copy">${value}</td>`;
+                } else if (isPriceCell) {
+                    return `<td class="price-cell">${value}</td>`;
+                } else {
+                    return `<td>${value}</td>`;
+                }
+            }).join('');
+            
+            return `<tr>${cells}</tr>`;
         }).join('');
 
         // Setup clipboard copy for table cells (only once)

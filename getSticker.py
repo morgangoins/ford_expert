@@ -51,10 +51,10 @@ def process_inventory(csv_path, output_csv):
     # Load CSV
     df = pd.read_csv(csv_path)
     
-    # Extract VINs
-    vins = df['VIN'].tolist()
-    stock_numbers = df['Stock Number'].tolist()
-    prices = df['MSRP'].tolist()
+    # Extract VINs (limit to first 5 for testing)
+    vins = df['VIN'].tolist()[:5]
+    stock_numbers = df['Stock Number'].tolist()[:5]
+    prices = df['MSRP'].tolist()[:5]
     
     # Create stickers folder
     os.makedirs('stickers', exist_ok=True)
@@ -84,26 +84,38 @@ def process_inventory(csv_path, output_csv):
             row['Stock Number'] = stock_numbers[i] if i < len(stock_numbers) else ''
             row['Price'] = prices[i] if i < len(prices) else ''
             
-            # Extract data from window sticker
+            # Extract data from window sticker - topBlueLeft section
             if 'topBlueLeft' in extracted_data:
-                lines = extracted_data['topBlueLeft']
+                lines = [l.strip() for l in extracted_data['topBlueLeft'] if l.strip()]
+                if len(lines) >= 1:
+                    row['Title'] = lines[0]
+                if len(lines) >= 2:
+                    row['Wheelbase'] = lines[1]
                 if len(lines) >= 3:
-                    row['Title'] = lines[0].strip()
-                    row['Engine'] = lines[1].strip() if len(lines) == 3 else lines[2].strip()
-                    row['Transmission'] = lines[2].strip() if len(lines) == 3 else lines[3].strip()
-                    if len(lines) >= 4:
-                        row['Wheelbase'] = lines[1].strip()
+                    row['Engine'] = lines[2]
+                if len(lines) >= 4:
+                    row['Transmission'] = lines[3]
             
-            if 'topBlueRight' in extracted_data and len(extracted_data['topBlueRight']) >= 4:
-                row['Exterior Color'] = extracted_data['topBlueRight'][1].strip()
-                row['Interior Color'] = extracted_data['topBlueRight'][3].strip()
+            # Extract data from window sticker - topBlueRight section
+            if 'topBlueRight' in extracted_data:
+                lines = [l.strip() for l in extracted_data['topBlueRight'] if l.strip()]
+                # Lines are: EXTERIOR, color, INTERIOR, color
+                if len(lines) >= 2:
+                    row['Exterior Color'] = lines[1]
+                if len(lines) >= 4:
+                    row['Interior Color'] = lines[3]
             
+            # Extract equipment group from optionalEquipment section
             if 'optionalEquipment' in extracted_data:
                 for line in extracted_data['optionalEquipment']:
-                    if line.startswith('EQUIPMENT GROUP'):
+                    if 'EQUIPMENT GROUP' in line.upper():
+                        # Extract the code (e.g., 101A, 302A, 303A)
                         parts = line.split()
-                        if len(parts) > 2:
-                            row['Equipment Group'] = parts[2].strip()
+                        for part in parts:
+                            # Look for pattern like 101A, 302A, etc.
+                            if part and part[0].isdigit() and part[-1].isalpha():
+                                row['Equipment Group'] = part.strip()
+                                break
                         break
             
             csv_data.append(row)
