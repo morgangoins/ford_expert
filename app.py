@@ -51,7 +51,8 @@ def get_vehicles():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 12, type=int)
     search = request.args.get('search', '')
-    inventory_type = request.args.get('inventory_type', 'new')  # default to new
+    inventory_type = request.args.get('inventory_type', 'new')  # new or used
+    view_mode = request.args.get('view_mode', 'card')  # card, list, or list2
     
     # Filters
     model_filter = request.args.get('model', '')
@@ -62,9 +63,9 @@ def get_vehicles():
     max_price = request.args.get('max_price', type=float)
     sort_by = request.args.get('sort', '')
     
-    # Select appropriate dataframe based on inventory type
-    if inventory_type == 'list2':
-        df = df_list2_new if request.args.get('list2_type', 'new') == 'new' else df_list2_used
+    # Select appropriate dataframe based on view mode and inventory type
+    if view_mode == 'list2':
+        df = df_list2_new if inventory_type == 'new' else df_list2_used
         if df.empty:
             return jsonify({'vehicles': [], 'total': 0, 'pages': 0, 'current_page': page})
     else:
@@ -77,7 +78,7 @@ def get_vehicles():
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
         # Different search columns for List2 vs regular inventory
-        if inventory_type == 'list2':
+        if view_mode == 'list2':
             search_cols = ['Title', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number', 'Transmission', 'Wheelbase', 'Equipment Group']
         else:
             search_cols = ['Make', 'Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number', 'Body Style', 'Fuel Economy']
@@ -164,7 +165,7 @@ def get_vehicles():
             print(f"Search error: {e}")
     
     # Apply filters (skip model/year/trim/body_style for List2 as it doesn't have these columns)
-    if inventory_type != 'list2':
+    if view_mode != 'list2':
         if model_filter:
             filtered_df = filtered_df[filtered_df['Model'] == model_filter]
         if year_filter:
@@ -175,21 +176,21 @@ def get_vehicles():
             filtered_df = filtered_df[filtered_df['Body Style'] == body_style_filter]
     
     # Price filtering (use appropriate column)
-    price_col = 'Price_numeric' if inventory_type == 'list2' else 'MSRP_numeric'
+    price_col = 'Price_numeric' if view_mode == 'list2' else 'MSRP_numeric'
     if min_price is not None:
         filtered_df = filtered_df[filtered_df[price_col] >= min_price]
     if max_price is not None:
         filtered_df = filtered_df[filtered_df[price_col] <= max_price]
     
     # Apply sorting
-    price_col = 'Price_numeric' if inventory_type == 'list2' else 'MSRP_numeric'
+    price_col = 'Price_numeric' if view_mode == 'list2' else 'MSRP_numeric'
     if sort_by == 'price_low':
         filtered_df = filtered_df.sort_values(price_col, ascending=True)
     elif sort_by == 'price_high':
         filtered_df = filtered_df.sort_values(price_col, ascending=False)
     else:
         # Default sort - List2 doesn't have Year/Model, so just sort by VIN
-        if inventory_type == 'list2':
+        if view_mode == 'list2':
             filtered_df = filtered_df.sort_values('VIN', ascending=True)
         else:
             filtered_df = filtered_df.sort_values(['Year', 'Model'], ascending=[False, True])
@@ -211,7 +212,7 @@ def get_vehicles():
     # Convert to records
     vehicles = []
     for _, row in page_data.iterrows():
-        if inventory_type == 'list2':
+        if view_mode == 'list2':
             # List2 has different columns from window sticker data
             vehicle = {
                 'vin': safe_value(row['VIN']),
@@ -275,17 +276,18 @@ def get_vehicles():
 def get_filters():
     """Get available filter options"""
     inventory_type = request.args.get('inventory_type', 'new')
+    view_mode = request.args.get('view_mode', 'card')
     
     # Select appropriate dataframe
-    if inventory_type == 'list2':
-        df = df_list2_new if request.args.get('list2_type', 'new') == 'new' else df_list2_used
+    if view_mode == 'list2':
+        df = df_list2_new if inventory_type == 'new' else df_list2_used
         if df.empty:
             return jsonify({'models': [], 'years': [], 'trims': [], 'body_styles': [], 'price_range': {'min': 0, 'max': 0}})
     else:
         df = df_new if inventory_type == 'new' else df_used
     
-    # Build filters based on inventory type
-    if inventory_type == 'list2':
+    # Build filters based on view mode
+    if view_mode == 'list2':
         # List2 doesn't have traditional filters, only price range
         price_col = 'Price_numeric'
         filters = {

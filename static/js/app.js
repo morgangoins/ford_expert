@@ -4,8 +4,7 @@ class VehicleInventory {
         this.filters = {};
         this.searchTerm = '';
         this.inventoryType = 'new'; // Default to new vehicles
-        this.list2SubType = 'new'; // For list2, track if showing new or used
-        this.viewMode = 'card'; // Default to card view
+        this.viewMode = 'card'; // Default to card view (card, list, list2)
         this.sortColumn = null;
         this.sortDirection = 'asc';
         this.currentVehicles = [];
@@ -22,11 +21,7 @@ class VehicleInventory {
 
     async loadFilters() {
         try {
-            let url = `/api/filters?inventory_type=${this.inventoryType}`;
-            if (this.inventoryType === 'list2') {
-                url += `&list2_type=${this.list2SubType}`;
-            }
-            const response = await fetch(url);
+            const response = await fetch(`/api/filters?inventory_type=${this.inventoryType}&view_mode=${this.viewMode}`);
             const filters = await response.json();
             
             this.populateSelect('model-filter', filters.models);
@@ -55,14 +50,11 @@ class VehicleInventory {
         try {
             const params = new URLSearchParams({
                 page: this.currentPage,
-                per_page: this.viewMode === 'list' ? 100 : 12,
+                per_page: (this.viewMode === 'list' || this.viewMode === 'list2') ? 100 : 12,
                 inventory_type: this.inventoryType,
+                view_mode: this.viewMode,
                 ...this.filters
             });
-            
-            if (this.inventoryType === 'list2') {
-                params.append('list2_type', this.list2SubType);
-            }
 
             if (this.searchTerm) {
                 params.append('search', this.searchTerm);
@@ -368,11 +360,11 @@ class VehicleInventory {
         // Inventory type toggle
         document.getElementById('toggle-new').addEventListener('click', () => this.switchInventoryType('new'));
         document.getElementById('toggle-used').addEventListener('click', () => this.switchInventoryType('used'));
-        document.getElementById('toggle-list2').addEventListener('click', () => this.switchInventoryType('list2'));
         
         // View mode toggle
         document.getElementById('toggle-card').addEventListener('click', () => this.switchViewMode('card'));
         document.getElementById('toggle-list').addEventListener('click', () => this.switchViewMode('list'));
+        document.getElementById('toggle-list2').addEventListener('click', () => this.switchViewMode('list2'));
     }
 
     performSearch() {
@@ -392,46 +384,14 @@ class VehicleInventory {
     }
 
     switchInventoryType(type) {
-        // Handle LIST2 sub-type switching
-        if (this.inventoryType === 'list2' && (type === 'new' || type === 'used')) {
-            // When in LIST2 mode, NEW/USED buttons switch the sub-type
-            if (this.list2SubType === type) return;
-            this.list2SubType = type;
-            this.currentPage = 1;
-            
-            // Update NEW/USED button states for list2 sub-type
-            document.getElementById('toggle-new').classList.toggle('active', type === 'new');
-            document.getElementById('toggle-used').classList.toggle('active', type === 'used');
-            
-            // Reload vehicles for new sub-type
-            this.loadFilters();
-            this.loadVehicles();
-            this.loadInventoryStatus();
-            return;
-        }
-        
-        // Regular inventory type switching
         if (this.inventoryType === type) return;
         
         this.inventoryType = type;
         this.currentPage = 1;
         
-        // When switching TO list2, set sub-type based on previous state
-        if (type === 'list2') {
-            // Keep current new/used state as list2 sub-type
-            this.list2SubType = (this.inventoryType === 'new' || this.inventoryType === 'used') ? this.inventoryType : 'new';
-        }
-        
         // Update toggle button states
-        if (type === 'list2') {
-            document.getElementById('toggle-new').classList.toggle('active', this.list2SubType === 'new');
-            document.getElementById('toggle-used').classList.toggle('active', this.list2SubType === 'used');
-            document.getElementById('toggle-list2').classList.add('active');
-        } else {
-            document.getElementById('toggle-new').classList.toggle('active', type === 'new');
-            document.getElementById('toggle-used').classList.toggle('active', type === 'used');
-            document.getElementById('toggle-list2').classList.remove('active');
-        }
+        document.getElementById('toggle-new').classList.toggle('active', type === 'new');
+        document.getElementById('toggle-used').classList.toggle('active', type === 'used');
         
         // Clear all filters and search when switching
         this.clearFilters();
@@ -549,10 +509,11 @@ class VehicleInventory {
         // Update toggle button states
         document.getElementById('toggle-card').classList.toggle('active', mode === 'card');
         document.getElementById('toggle-list').classList.toggle('active', mode === 'list');
+        document.getElementById('toggle-list2').classList.toggle('active', mode === 'list2');
         
-        // Show/hide appropriate container
+        // Show/hide appropriate container (both list and list2 show table)
         document.getElementById('vehicles-grid').style.display = mode === 'card' ? 'grid' : 'none';
-        document.getElementById('vehicles-table-container').style.display = mode === 'list' ? 'block' : 'none';
+        document.getElementById('vehicles-table-container').style.display = (mode === 'list' || mode === 'list2') ? 'block' : 'none';
         
         // Reload vehicles
         this.loadVehicles();
@@ -568,8 +529,8 @@ class VehicleInventory {
             return;
         }
 
-        // Define columns based on inventory type
-        const columns = this.inventoryType === 'list2' ? [
+        // Define columns based on view mode
+        const columns = this.viewMode === 'list2' ? [
             { key: 'title', label: 'TITLE', sortable: true },
             { key: 'msrp', label: 'PRICE', sortable: true },
             { key: 'vin', label: 'VIN', sortable: true },
