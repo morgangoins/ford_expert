@@ -6,7 +6,7 @@ import pdfplumber
 # Function to extract text from specific regions in PDF
 def extract_pdf_regions_to_text(pdf_path, vin):
     regions = [
-        ('title', 200, 700, 460, 24),
+        ('title', 160, 700, 360, 22),
         ('topBlueLeft', 200, 672, 200, 45),
         ('topBlueRight', 420, 672, 230, 45),
         ('optionalEquipment', 20, 172, 280, 320),
