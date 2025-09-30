@@ -4,6 +4,7 @@ class VehicleInventory {
         this.filters = {};
         this.searchTerm = '';
         this.inventoryType = 'new'; // Default to new vehicles
+        this.list2SubType = 'new'; // For list2, track if showing new or used
         this.viewMode = 'card'; // Default to card view
         this.sortColumn = null;
         this.sortDirection = 'asc';
@@ -21,7 +22,11 @@ class VehicleInventory {
 
     async loadFilters() {
         try {
-            const response = await fetch(`/api/filters?inventory_type=${this.inventoryType}`);
+            let url = `/api/filters?inventory_type=${this.inventoryType}`;
+            if (this.inventoryType === 'list2') {
+                url += `&list2_type=${this.list2SubType}`;
+            }
+            const response = await fetch(url);
             const filters = await response.json();
             
             this.populateSelect('model-filter', filters.models);
@@ -54,6 +59,10 @@ class VehicleInventory {
                 inventory_type: this.inventoryType,
                 ...this.filters
             });
+            
+            if (this.inventoryType === 'list2') {
+                params.append('list2_type', this.list2SubType);
+            }
 
             if (this.searchTerm) {
                 params.append('search', this.searchTerm);
@@ -91,78 +100,143 @@ class VehicleInventory {
             return;
         }
 
-        grid.innerHTML = vehicles.map(vehicle => `
-            <div class="vehicle-card">
-                <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
-                    ${vehicle.photos.map((photo, index) => `
-                        <img ${index === 0 ? `src="${photo}"` : `data-src="${photo}"`} alt="${vehicle.year} ${vehicle.make} ${vehicle.model}" 
-                             class="${index === 0 ? 'active' : ''}" data-index="${index}" 
-                             onerror="this.src='https://via.placeholder.com/280x180/2a2a2a/666?text=NO+IMAGE'">
-                    `).join('')}
-                    
-                    ${vehicle.photos.length > 1 ? `
-                    <div class="carousel-controls">
-                        <button class="carousel-btn prev" onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('prevPhoto'))">‹</button>
-                        <button class="carousel-btn next" onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('nextPhoto'))">›</button>
-                    </div>
-                    
-                    <div class="photo-indicators">
-                        ${vehicle.photos.map((_, index) => `
-                            <span class="indicator ${index === 0 ? 'active' : ''}" 
-                                  onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('goToPhoto', {detail: ${index}}))"></span>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                </div>
-                
-                <div class="vehicle-info">
-                    <div class="vehicle-title">
-                    ${vehicle.vehicle_link ? `<a href="${vehicle.vehicle_link}" target="_blank" rel="noopener noreferrer">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</a>` : `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
-                </div>
-                    <div class="price-row">
-                        <div class="vehicle-price">${vehicle.msrp}</div>
-                        ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
-                        <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn-inline">CARFAX</a>
-                        ` : ''}
-                        ${vehicle.inventory_type === 'new' ? `
-                        <a href="https://fordvisions.dealerconnection.com/vinv/GetInvoice.aspx?v=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="invoice-btn">INVOICE</a>
-                        <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">STICKER</a>
-                        ` : ''}
-                    </div>
-                    
-                    <div class="vehicle-details">
-                        <div class="detail-row">
-                            <span class="detail-label">VIN:</span>
-                            <span class="detail-value clickable-value" data-copy="${vehicle.vin}" title="Click to copy">${vehicle.vin}</span>
+        grid.innerHTML = vehicles.map(vehicle => {
+            // Different rendering for List2 vs regular inventory
+            if (vehicle.inventory_type === 'list2') {
+                return `
+                    <div class="vehicle-card">
+                        <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
+                            ${vehicle.photos.map((photo, index) => `
+                                <img ${index === 0 ? `src="${photo}"` : `data-src="${photo}"`} alt="${vehicle.title || 'Vehicle'}" 
+                                     class="${index === 0 ? 'active' : ''}" data-index="${index}" 
+                                     onerror="this.src='https://via.placeholder.com/280x180/2a2a2a/666?text=NO+IMAGE'">
+                            `).join('')}
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">STOCK:</span>
-                            <span class="detail-value clickable-value" data-copy="${vehicle.stock_number}" title="Click to copy">${vehicle.stock_number}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">EXTERIOR:</span>
-                            <span class="detail-value">${vehicle.exterior_color}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">INTERIOR:</span>
-                            <span class="detail-value">${vehicle.interior_color}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">ENGINE:</span>
-                            <span class="detail-value">${vehicle.engine}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">BODY:</span>
-                            <span class="detail-value">${vehicle.body_style}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">TRANS:</span>
-                            <span class="detail-value">${vehicle.transmission}</span>
+                        
+                        <div class="vehicle-info">
+                            <div class="vehicle-title">${vehicle.title || 'N/A'}</div>
+                            <div class="price-row">
+                                <div class="vehicle-price">${vehicle.msrp}</div>
+                                <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">STICKER</a>
+                            </div>
+                            
+                            <div class="vehicle-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">VIN:</span>
+                                    <span class="detail-value clickable-value" data-copy="${vehicle.vin}" title="Click to copy">${vehicle.vin}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">STOCK:</span>
+                                    <span class="detail-value clickable-value" data-copy="${vehicle.stock_number}" title="Click to copy">${vehicle.stock_number}</span>
+                                </div>
+                                ${vehicle.wheelbase ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">WHEELBASE:</span>
+                                    <span class="detail-value">${vehicle.wheelbase}</span>
+                                </div>
+                                ` : ''}
+                                <div class="detail-row">
+                                    <span class="detail-label">EXTERIOR:</span>
+                                    <span class="detail-value">${vehicle.exterior_color}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">INTERIOR:</span>
+                                    <span class="detail-value">${vehicle.interior_color}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">ENGINE:</span>
+                                    <span class="detail-value">${vehicle.engine}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">TRANS:</span>
+                                    <span class="detail-value">${vehicle.transmission}</span>
+                                </div>
+                                ${vehicle.equipment_group ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">EQUIPMENT:</span>
+                                    <span class="detail-value">${vehicle.equipment_group}</span>
+                                </div>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        `).join('');
+                `;
+            } else {
+                // Regular inventory rendering
+                return `
+                    <div class="vehicle-card">
+                        <div class="photo-carousel" data-vehicle-id="${vehicle.vin}">
+                            ${vehicle.photos.map((photo, index) => `
+                                <img ${index === 0 ? `src="${photo}"` : `data-src="${photo}"`} alt="${vehicle.year} ${vehicle.make} ${vehicle.model}" 
+                                     class="${index === 0 ? 'active' : ''}" data-index="${index}" 
+                                     onerror="this.src='https://via.placeholder.com/280x180/2a2a2a/666?text=NO+IMAGE'">
+                            `).join('')}
+                            
+                            ${vehicle.photos.length > 1 ? `
+                            <div class="carousel-controls">
+                                <button class="carousel-btn prev" onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('prevPhoto'))">‹</button>
+                                <button class="carousel-btn next" onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('nextPhoto'))">›</button>
+                            </div>
+                            
+                            <div class="photo-indicators">
+                                ${vehicle.photos.map((_, index) => `
+                                    <span class="indicator ${index === 0 ? 'active' : ''}" 
+                                          onclick="this.closest('.photo-carousel').dispatchEvent(new CustomEvent('goToPhoto', {detail: ${index}}))"></span>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="vehicle-info">
+                            <div class="vehicle-title">
+                            ${vehicle.vehicle_link ? `<a href="${vehicle.vehicle_link}" target="_blank" rel="noopener noreferrer">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</a>` : `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
+                        </div>
+                            <div class="price-row">
+                                <div class="vehicle-price">${vehicle.msrp}</div>
+                                ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
+                                <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn-inline">CARFAX</a>
+                                ` : ''}
+                                ${vehicle.inventory_type === 'new' ? `
+                                <a href="https://fordvisions.dealerconnection.com/vinv/GetInvoice.aspx?v=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="invoice-btn">INVOICE</a>
+                                <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">STICKER</a>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="vehicle-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">VIN:</span>
+                                    <span class="detail-value clickable-value" data-copy="${vehicle.vin}" title="Click to copy">${vehicle.vin}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">STOCK:</span>
+                                    <span class="detail-value clickable-value" data-copy="${vehicle.stock_number}" title="Click to copy">${vehicle.stock_number}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">EXTERIOR:</span>
+                                    <span class="detail-value">${vehicle.exterior_color}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">INTERIOR:</span>
+                                    <span class="detail-value">${vehicle.interior_color}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">ENGINE:</span>
+                                    <span class="detail-value">${vehicle.engine}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">BODY:</span>
+                                    <span class="detail-value">${vehicle.body_style}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">TRANS:</span>
+                                    <span class="detail-value">${vehicle.transmission}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }).join('');
 
         // Setup photo carousels
         this.setupCarousels();
@@ -294,6 +368,7 @@ class VehicleInventory {
         // Inventory type toggle
         document.getElementById('toggle-new').addEventListener('click', () => this.switchInventoryType('new'));
         document.getElementById('toggle-used').addEventListener('click', () => this.switchInventoryType('used'));
+        document.getElementById('toggle-list2').addEventListener('click', () => this.switchInventoryType('list2'));
         
         // View mode toggle
         document.getElementById('toggle-card').addEventListener('click', () => this.switchViewMode('card'));
@@ -317,14 +392,46 @@ class VehicleInventory {
     }
 
     switchInventoryType(type) {
+        // Handle LIST2 sub-type switching
+        if (this.inventoryType === 'list2' && (type === 'new' || type === 'used')) {
+            // When in LIST2 mode, NEW/USED buttons switch the sub-type
+            if (this.list2SubType === type) return;
+            this.list2SubType = type;
+            this.currentPage = 1;
+            
+            // Update NEW/USED button states for list2 sub-type
+            document.getElementById('toggle-new').classList.toggle('active', type === 'new');
+            document.getElementById('toggle-used').classList.toggle('active', type === 'used');
+            
+            // Reload vehicles for new sub-type
+            this.loadFilters();
+            this.loadVehicles();
+            this.loadInventoryStatus();
+            return;
+        }
+        
+        // Regular inventory type switching
         if (this.inventoryType === type) return;
         
         this.inventoryType = type;
         this.currentPage = 1;
         
+        // When switching TO list2, set sub-type based on previous state
+        if (type === 'list2') {
+            // Keep current new/used state as list2 sub-type
+            this.list2SubType = (this.inventoryType === 'new' || this.inventoryType === 'used') ? this.inventoryType : 'new';
+        }
+        
         // Update toggle button states
-        document.getElementById('toggle-new').classList.toggle('active', type === 'new');
-        document.getElementById('toggle-used').classList.toggle('active', type === 'used');
+        if (type === 'list2') {
+            document.getElementById('toggle-new').classList.toggle('active', this.list2SubType === 'new');
+            document.getElementById('toggle-used').classList.toggle('active', this.list2SubType === 'used');
+            document.getElementById('toggle-list2').classList.add('active');
+        } else {
+            document.getElementById('toggle-new').classList.toggle('active', type === 'new');
+            document.getElementById('toggle-used').classList.toggle('active', type === 'used');
+            document.getElementById('toggle-list2').classList.remove('active');
+        }
         
         // Clear all filters and search when switching
         this.clearFilters();
@@ -461,8 +568,19 @@ class VehicleInventory {
             return;
         }
 
-        // Define columns to display
-        const columns = [
+        // Define columns based on inventory type
+        const columns = this.inventoryType === 'list2' ? [
+            { key: 'title', label: 'TITLE', sortable: true },
+            { key: 'msrp', label: 'PRICE', sortable: true },
+            { key: 'vin', label: 'VIN', sortable: true },
+            { key: 'stock_number', label: 'STOCK', sortable: true },
+            { key: 'wheelbase', label: 'WHEELBASE', sortable: true },
+            { key: 'exterior_color', label: 'EXTERIOR', sortable: true },
+            { key: 'interior_color', label: 'INTERIOR', sortable: true },
+            { key: 'engine', label: 'ENGINE', sortable: true },
+            { key: 'transmission', label: 'TRANSMISSION', sortable: true },
+            { key: 'equipment_group', label: 'EQUIPMENT', sortable: true }
+        ] : [
             { key: 'year', label: 'YEAR', sortable: true },
             { key: 'make', label: 'MAKE', sortable: true },
             { key: 'model', label: 'MODEL', sortable: true },

@@ -17,6 +17,8 @@ def extract_pdf_regions_to_text(pdf_path, vin):
     ]
     
     vin_folder = os.path.dirname(pdf_path)
+    extracted_data = {}
+    
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
             for label, x0, y0, width, height in regions:
@@ -29,6 +31,9 @@ def extract_pdf_regions_to_text(pdf_path, vin):
                     output_path = os.path.join(vin_folder, f"{label}.txt")
                     with open(output_path, 'w', encoding='utf-8') as txt_file:
                         txt_file.write(text.strip())
+                    extracted_data[label] = text.strip().split('\n')
+    
+    return extracted_data
 
 # Function to convert entire PDF to text
 def extract_pdf_to_text(pdf_path):
@@ -41,28 +46,91 @@ def extract_pdf_to_text(pdf_path):
         txt_file.write(text)
     return output_path
 
-# Load CSV
-df = pd.read_csv('inventory.csv')
-
-# Extract VINs
-vins = df['VIN'].tolist()
-
-# Create stickers folder
-os.makedirs('stickers', exist_ok=True)
-
-# Download PDFs and process
-for vin in vins:
-    # Create subfolder for each VIN
-    vin_folder = os.path.join('stickers', vin)
-    os.makedirs(vin_folder, exist_ok=True)
+# Process both new and used inventories
+def process_inventory(csv_path, output_csv):
+    # Load CSV
+    df = pd.read_csv(csv_path)
     
-    url = f"https://www.windowsticker.forddirect.com/windowsticker.pdf?vin={vin}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        pdf_path = os.path.join(vin_folder, f"{vin}.pdf")
-        with open(pdf_path, 'wb') as f:
-            f.write(response.content)
-        extract_pdf_to_text(pdf_path)
-        extract_pdf_regions_to_text(pdf_path, vin)
-    else:
-        print(f"Failed to download for VIN: {vin}")
+    # Extract VINs
+    vins = df['VIN'].tolist()
+    stock_numbers = df['Stock Number'].tolist()
+    prices = df['MSRP'].tolist()
+    
+    # Create stickers folder
+    os.makedirs('stickers', exist_ok=True)
+    
+    # Prepare CSV data
+    csv_data = []
+    
+    # Download PDFs and process
+    for i, vin in enumerate(vins):
+        # Create subfolder for each VIN
+        vin_folder = os.path.join('stickers', vin)
+        os.makedirs(vin_folder, exist_ok=True)
+        
+        url = f"https://www.windowsticker.forddirect.com/windowsticker.pdf?vin={vin}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            pdf_path = os.path.join(vin_folder, f"{vin}.pdf")
+            with open(pdf_path, 'wb') as f:
+                f.write(response.content)
+            extract_pdf_to_text(pdf_path)
+            extracted_data = extract_pdf_regions_to_text(pdf_path, vin)
+            
+            # Extract data for CSV
+            row = {'VIN': vin}
+            
+            # Add stock and price from original scrape
+            row['Stock Number'] = stock_numbers[i] if i < len(stock_numbers) else ''
+            row['Price'] = prices[i] if i < len(prices) else ''
+            
+            # Extract data from window sticker
+            if 'topBlueLeft' in extracted_data:
+                lines = extracted_data['topBlueLeft']
+                if len(lines) >= 3:
+                    row['Title'] = lines[0].strip()
+                    row['Engine'] = lines[1].strip() if len(lines) == 3 else lines[2].strip()
+                    row['Transmission'] = lines[2].strip() if len(lines) == 3 else lines[3].strip()
+                    if len(lines) >= 4:
+                        row['Wheelbase'] = lines[1].strip()
+            
+            if 'topBlueRight' in extracted_data and len(extracted_data['topBlueRight']) >= 4:
+                row['Exterior Color'] = extracted_data['topBlueRight'][1].strip()
+                row['Interior Color'] = extracted_data['topBlueRight'][3].strip()
+            
+            if 'optionalEquipment' in extracted_data:
+                for line in extracted_data['optionalEquipment']:
+                    if line.startswith('EQUIPMENT GROUP'):
+                        parts = line.split()
+                        if len(parts) > 2:
+                            row['Equipment Group'] = parts[2].strip()
+                        break
+            
+            csv_data.append(row)
+            print(f"Processed {i+1}/{len(vins)}: {vin}")
+        else:
+            print(f"Failed to download for VIN: {vin}")
+            # Add basic row even if sticker fails
+            csv_data.append({
+                'VIN': vin,
+                'Stock Number': stock_numbers[i] if i < len(stock_numbers) else '',
+                'Price': prices[i] if i < len(prices) else ''
+            })
+    
+    # Create DataFrame and save to CSV
+    columns = ['VIN', 'Stock Number', 'Price', 'Title', 'Wheelbase', 'Engine', 'Transmission', 'Exterior Color', 'Interior Color', 'Equipment Group']
+    output_df = pd.DataFrame(csv_data)
+    # Reorder columns, keeping any that exist
+    existing_cols = [c for c in columns if c in output_df.columns]
+    output_df = output_df[existing_cols]
+    output_df.to_csv(output_csv, index=False)
+    print(f"Saved to {output_csv}")
+
+if __name__ == '__main__':
+    print("Processing new inventory...")
+    process_inventory('inventoryNew.csv', 'inventoryList2New.csv')
+    
+    print("\nProcessing used inventory...")
+    process_inventory('inventoryUsed.csv', 'inventoryList2Used.csv')
+    
+    print("\nDone!")
