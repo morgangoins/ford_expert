@@ -99,11 +99,17 @@ class VehicleInventory {
                 </div>
                 
                 <div class="vehicle-info">
-                    <div class="vehicle-title">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</div>
+                    <div class="vehicle-title">
+                    ${vehicle.vehicle_link ? `<a href="${vehicle.vehicle_link}" target="_blank" rel="noopener noreferrer">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}</a>` : `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
+                </div>
                     <div class="price-row">
                         <div class="vehicle-price">${vehicle.msrp}</div>
                         ${vehicle.inventory_type === 'used' && vehicle.carfax_url ? `
                         <a href="${vehicle.carfax_url}" target="_blank" rel="noopener noreferrer" class="carfax-btn-inline">CARFAX</a>
+                        ` : ''}
+                        ${vehicle.inventory_type === 'new' ? `
+                        <a href="https://fordvisions.dealerconnection.com/vinv/GetInvoice.aspx?v=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="invoice-btn">INVOICE</a>
+                        <a href="https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${vehicle.vin}" target="_blank" rel="noopener noreferrer" class="window-sticker-btn">STICKER</a>
                         ` : ''}
                     </div>
                     

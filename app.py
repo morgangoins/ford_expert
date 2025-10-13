@@ -8,6 +8,7 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
+
 # Load vehicle data
 df_new = pd.read_csv('inventoryNew.csv')
 df_used = pd.read_csv('inventoryUsed.csv')
@@ -17,7 +18,7 @@ df_new['MSRP_numeric'] = df_new['MSRP'].str.replace('$', '').str.replace(',', ''
 df_new['Year'] = df_new['Year'].astype(int)
 
 # Clean and prepare data for used inventory (use Retail Price as price)
-df_used['MSRP_numeric'] = df_used['Retail Price'].str.replace('$', '').str.replace(',', '').astype(float)
+df_used['MSRP_numeric'] = df_used['Retail Price'].astype(str).str.replace('$', '').str.replace(',', '').astype(float)
 df_used['Year'] = df_used['Year'].astype(int)
 # Add empty MSRP column for used vehicles to maintain consistency
 df_used['MSRP'] = df_used['Retail Price']  # Use retail price as display price
@@ -53,39 +54,87 @@ def get_vehicles():
     # Start with selected inventory data
     filtered_df = df.copy()
     
-    # Apply multi-parameter search filter with robustness
+    # Apply multi-parameter search filter with robustness and exclusion support
     if search:
         search_terms = search.strip().split()  # Split by whitespace to get individual terms
-        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number']
+        search_cols = ['Model', 'Trim', 'Exterior Color', 'Interior Color', 'Engine', 'VIN', 'Stock Number', 'Body Style', 'Fuel Economy']
+        
+        # Separate include and exclude terms
+        include_terms = [term for term in search_terms if not term.startswith('-')]
+        exclude_terms = [term[1:] for term in search_terms if term.startswith('-') and len(term) > 1]
         
         try:
-            # For each search term, create a mask that checks if it matches in any column
-            term_masks = []
+            # Process include terms (all must match)
+            if include_terms:
+                include_masks = []
+                
+                for term in include_terms:
+                    # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                    normalized_term = term.replace('-', '').replace(' ', '').lower()
+                    
+                    # Create mask for this term by checking each search column
+                    term_masks = []
+                    for col in search_cols:
+                        if col in filtered_df.columns:
+                            # Original search for this term
+                            col_mask1 = filtered_df[col].astype(str).str.contains(term, case=False, na=False, regex=False)
+                            
+                            # Normalized search for this term (remove hyphens and spaces)
+                            col_mask2 = filtered_df[col].astype(str).str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                            
+                            # Combine both approaches for this column
+                            col_mask = col_mask1 | col_mask2
+                            term_masks.append(col_mask)
+                    
+                    # If term found in any column, include the row
+                    if term_masks:
+                        term_mask = term_masks[0]
+                        for mask in term_masks[1:]:
+                            term_mask = term_mask | mask
+                        include_masks.append(term_mask)
+                
+                # All include terms must match (AND logic)
+                if include_masks:
+                    combined_include_mask = include_masks[0]
+                    for mask in include_masks[1:]:
+                        combined_include_mask = combined_include_mask & mask
+                    filtered_df = filtered_df.loc[combined_include_mask].copy()
             
-            for term in search_terms:
-                # Normalize term for robustness (remove hyphens, spaces, make lowercase)
-                normalized_term = term.replace('-', '').replace(' ', '').lower()
+            # Process exclude terms (none should match)
+            if exclude_terms:
+                exclude_masks = []
                 
-                # Original search for this term
-                original_mask = filtered_df[search_cols].astype(str).apply(
-                    lambda x: x.str.contains(term, case=False, na=False, regex=False)
-                ).any(axis=1)
+                for term in exclude_terms:
+                    # Normalize term for robustness (remove hyphens, spaces, make lowercase)
+                    normalized_term = term.replace('-', '').replace(' ', '').lower()
+                    
+                    # Create mask for this term by checking each search column
+                    term_masks = []
+                    for col in search_cols:
+                        if col in filtered_df.columns:
+                            # Original search for this term
+                            col_mask1 = filtered_df[col].astype(str).str.contains(term, case=False, na=False, regex=False)
+                            
+                            # Normalized search for this term (remove hyphens and spaces)
+                            col_mask2 = filtered_df[col].astype(str).str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
+                            
+                            # Combine both approaches for this column
+                            col_mask = col_mask1 | col_mask2
+                            term_masks.append(col_mask)
+                    
+                    # If term found in any column, mark for exclusion
+                    if term_masks:
+                        term_mask = term_masks[0]
+                        for mask in term_masks[1:]:
+                            term_mask = term_mask | mask
+                        exclude_masks.append(term_mask)
                 
-                # Normalized search for this term (remove hyphens and spaces)
-                normalized_mask = filtered_df[search_cols].astype(str).apply(
-                    lambda x: x.str.replace('-', '', regex=False).str.replace(' ', '', regex=False).str.lower().str.contains(normalized_term, case=False, na=False, regex=False)
-                ).any(axis=1)
-                
-                # Combine both approaches for this term
-                term_mask = original_mask | normalized_mask
-                term_masks.append(term_mask)
-            
-            # All terms must match (AND logic) - vehicle must contain ALL search terms
-            if term_masks:
-                combined_mask = term_masks[0]
-                for mask in term_masks[1:]:
-                    combined_mask = combined_mask & mask
-                filtered_df = filtered_df[combined_mask]
+                # Exclude vehicles that match any exclude term
+                if exclude_masks:
+                    combined_exclude_mask = exclude_masks[0]
+                    for mask in exclude_masks[1:]:
+                        combined_exclude_mask = combined_exclude_mask | mask
+                    filtered_df = filtered_df.loc[~combined_exclude_mask].copy()
             
         except Exception as e:
             # Fallback to simple search if there's any error
@@ -159,6 +208,12 @@ def get_vehicles():
         # Add CarFax URL for used vehicles
         if inventory_type == 'used' and 'Carfax URL' in row:
             vehicle['carfax_url'] = safe_value(row['Carfax URL'])
+            
+        # Add vehicle link URL
+        link_column = 'Vehicle Link' if inventory_type == 'new' else 'Full Link'
+        if link_column in row:
+            vehicle['vehicle_link'] = safe_value(row[link_column])
+            
         vehicles.append(vehicle)
     
     return jsonify({
