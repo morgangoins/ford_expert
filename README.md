@@ -40,6 +40,8 @@ Note: Dependent on running scrape.py first.
 
 TODO:
 
-compare vehicles
+search by any feature reliably,
+
+compare vehicles (with llm?),
 
 integrate product knowledge
